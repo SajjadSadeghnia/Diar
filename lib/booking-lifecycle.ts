@@ -1,0 +1,127 @@
+import type { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import {
+  getPaymentExpiresAt,
+  hasBookingOverlap,
+  validateBookingDates,
+  validateCooldown,
+  type BookingRange,
+} from "@/lib/booking-utils";
+import { calcDays } from "@/lib/utils";
+
+type Tx = Omit<
+  PrismaClient,
+  "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
+>;
+
+/** Expire unpaid holds only — receipt upload lifts the 2h limit (admin review has no deadline). */
+export async function expireStaleBookings(client: Tx | typeof prisma = prisma) {
+  const now = new Date();
+  const result = await client.booking.updateMany({
+    where: {
+      status: "pending_payment",
+      expiresAt: { lt: now },
+      payment: { is: null },
+    },
+    data: { status: "expired" },
+  });
+  return result.count;
+}
+
+export async function fetchBlockingBookings(propertyId: string, client: Tx | typeof prisma = prisma) {
+  await expireStaleBookings(client);
+  return client.booking.findMany({
+    where: {
+      propertyId,
+      status: { in: ["approved", "pending_payment"] },
+    },
+    select: {
+      startDate: true,
+      endDate: true,
+      status: true,
+      expiresAt: true,
+      payment: { select: { id: true } },
+    },
+  });
+}
+
+export type CreateBookingInput = {
+  userId: string;
+  propertyId: string;
+  startDate: Date;
+  endDate: Date;
+};
+
+export async function createBookingHold(input: CreateBookingInput) {
+  const { userId, propertyId, startDate, endDate } = input;
+  const now = new Date();
+
+  const dateValidation = validateBookingDates(startDate, endDate, now);
+  if (!dateValidation.valid) {
+    throw new Error(dateValidation.error);
+  }
+
+  return prisma.$transaction(async (tx) => {
+    await expireStaleBookings(tx);
+
+    const property = await tx.property.findUnique({ where: { id: propertyId } });
+    if (!property || property.status !== "available") {
+      throw new Error("ملک قابل رزرو نیست");
+    }
+
+    const blocking = await tx.booking.findMany({
+      where: {
+        propertyId,
+        status: { in: ["approved", "pending_payment"] },
+      },
+      select: {
+        startDate: true,
+        endDate: true,
+        status: true,
+        expiresAt: true,
+        payment: { select: { id: true } },
+      },
+    });
+
+    const ranges: BookingRange[] = blocking.map((b) => ({
+      startDate: b.startDate,
+      endDate: b.endDate,
+      status: b.status,
+      expiresAt: b.expiresAt,
+      hasPayment: Boolean(b.payment),
+    }));
+
+    if (hasBookingOverlap(startDate, endDate, ranges, now)) {
+      throw new Error("این بازه در حال حاضر رزرو شده یا به‌صورت موقت رزرو است");
+    }
+
+    const lastApproved = await tx.booking.findFirst({
+      where: { userId, status: "approved" },
+      orderBy: { endDate: "desc" },
+      select: { endDate: true },
+    });
+
+    const cooldownValidation = validateCooldown(startDate, lastApproved?.endDate ?? null, now);
+    if (!cooldownValidation.valid) {
+      throw new Error(cooldownValidation.error);
+    }
+
+    const days = calcDays(startDate, endDate);
+    const totalPrice = days * property.dailyPrice;
+    const expiresAt = getPaymentExpiresAt(now);
+
+    const booking = await tx.booking.create({
+      data: {
+        userId,
+        propertyId,
+        startDate,
+        endDate,
+        totalPrice,
+        status: "pending_payment",
+        expiresAt,
+      },
+    });
+
+    return booking;
+  });
+}

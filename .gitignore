@@ -20,6 +20,13 @@
 # production
 /build
 
+# backups (created on server by scripts/backup.sh)
+/backups/
+
+# dev-only credentials and historical agent reports (do not deploy)
+LOGIN_CREDENTIALS.md
+*_REPORT.md
+
 # misc
 .DS_Store
 *.pem

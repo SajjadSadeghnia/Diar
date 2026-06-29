@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  employee
+}
+
+enum PropertyStatus {
+  available
+  unavailable
+}
+
+enum BookingStatus {
+  pending_payment
+  approved
+  rejected
+  expired
+}
+
+enum PaymentStatus {
+  pending
+  approved
+  rejected
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String
+  phone     String    @unique
+  password  String
+  role      Role      @default(employee)
+  createdAt DateTime  @default(now())
+  bookings  Booking[]
+}
+
+model Property {
+  id           String         @id @default(cuid())
+  title        String
+  description  String
+  address      String         @default("تهران، خیابان ولیعصر")
+  contactPhone String         @default("021-12345678")
+  dailyPrice   Int
+  images       String[]
+  capacity     Int            @default(5)
+  bedrooms     Int            @default(2)
+  bathroomInfo String         @default("یک سرویس ایرانی")
+  seaDistance  String         @default("ورودی دریا از درب داخل شهرک")
+  mapUrl       String?
+  mobileSignal String         @default("مناسب")
+  detailsJson  Json?
+  status       PropertyStatus @default(available)
+  createdAt    DateTime       @default(now())
+  bookings     Booking[]
+}
+
+model Booking {
+  id          String        @id @default(cuid())
+  userId      String
+  propertyId  String
+  startDate   DateTime
+  endDate     DateTime
+  totalPrice  Int
+  status      BookingStatus @default(pending_payment)
+  expiresAt   DateTime?
+  createdAt   DateTime      @default(now())
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property    Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  payment     Payment?
+}
+
+model Payment {
+  id          String        @id @default(cuid())
+  bookingId   String        @unique
+  receiptPath String
+  amount      Int
+  status      PaymentStatus @default(pending)
+  createdAt   DateTime      @default(now())
+  booking     Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model SystemSetting {
+  id          Int      @id
+  cardNumber  String
+  instructions String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
