@@ -12,10 +12,9 @@ export function SiteFooter() {
             </div>
             <div>
               <p className="font-bold">دیار</p>
-              <p className="text-xs text-gray-300">سامانه رزرو داخلی سازمان</p>
+              <p className="text-xs text-gray-300">سامانه رزرو داخلی</p>
             </div>
           </div>
-          <p className="text-sm text-gray-300">سامانه داخلی رزرو ویلای سازمانی دیار — ویژه کارمندان.</p>
         </div>
 
         <div>
@@ -36,9 +35,8 @@ export function SiteFooter() {
         <div>
           <h3 className="mb-3 font-semibold text-[#c9a227]">تماس با ما</h3>
           <div className="space-y-2 text-sm text-gray-300">
-            <p>پشتیبانی سامانه دیار</p>
+            <p>مدیر سامانه دیار</p>
             <p>تلفن: 021-12345678</p>
-            <p>پشتیبانی: از طریق مدیر سامانه</p>
           </div>
         </div>
       </div>

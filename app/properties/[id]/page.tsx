@@ -31,7 +31,7 @@ type AvailabilityPayload = {
 
 const GLOBAL_HINT: Record<PropertyAvailabilityState, string> = {
   available: "تقویم باز است — تاریخ مورد نظر را انتخاب کنید",
-  temporarily_reserved: "برخی تاریخ‌ها به‌صورت موقت (۲ ساعت) رزرو شده‌اند",
+  temporarily_reserved: "",
   reserved: "برخی تاریخ‌ها قبلاً رزرو شده‌اند — فقط روزهای آزاد قابل انتخاب هستند",
 };
 
@@ -244,7 +244,7 @@ export default function PropertyDetailPage() {
 
             <div className={`grid gap-3 ${pickerDisabled ? "pointer-events-none opacity-50" : ""}`}>
               <div>
-                <label className="mb-1 block text-xs text-slate-500">تاریخ ورود (جلالی) — ورود ۱۲ ظهر</label>
+                <label className="mb-1 block text-xs text-slate-500">تاریخ ورود</label>
                 <DatePicker
                   calendar={persian}
                   locale={persian_fa}
@@ -257,7 +257,7 @@ export default function PropertyDetailPage() {
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-slate-500">تاریخ خروج (جلالی) — خروج ۱۲ ظهر</label>
+                <label className="mb-1 block text-xs text-slate-500">تاریخ خروج</label>
                 <DatePicker
                   calendar={persian}
                   locale={persian_fa}
@@ -290,7 +290,7 @@ export default function PropertyDetailPage() {
                     ? "ابتدا تاریخ‌ها را انتخاب کنید"
                     : !selection.canBook
                       ? selection.message
-                      : "ادامه و پرداخت (رزرو ۲ ساعته)"}
+                      : "رزرو"}
             </button>
 
             <button

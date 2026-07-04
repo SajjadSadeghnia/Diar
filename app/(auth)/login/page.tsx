@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { Building2, Eye, EyeOff, Lock, Phone } from "lucide-react";
 
@@ -53,7 +54,7 @@ export default function LoginPage() {
 
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">شماره تماس</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">اطلاعات کاربر</label>
               <div className="relative">
                 <Phone className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
@@ -100,18 +101,8 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="hidden lg:block lg:w-1/2">
-        <div className="flex h-full items-center justify-center bg-gradient-to-br from-[#1a365d] to-[#2d4a3e] p-12 text-center text-white">
-          <div>
-            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-[#c9a227]/20">
-              <Building2 className="h-12 w-12 text-[#c9a227]" />
-            </div>
-            <h2 className="mb-4 text-3xl font-bold">به دیار خوش آمدید</h2>
-            <p className="text-xl text-gray-200">
-              پس از ورود می‌توانید تاریخ رزرو را انتخاب کنید، رسید پرداخت بارگذاری کنید و وضعیت رزرو را پیگیری کنید.
-            </p>
-          </div>
-        </div>
+      <div className="relative hidden lg:block lg:w-1/2">
+        <Image src="/brand/login-umbrellas.jpg" alt="" fill className="object-cover" />
       </div>
     </div>
   );

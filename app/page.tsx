@@ -1,14 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Building2, CheckCircle, Clock, MapPin, Shield, Users } from "lucide-react";
+import { ArrowLeft, MapPin } from "lucide-react";
 import { StatusBadge } from "@/components/status-badge";
 import { getCurrentUser } from "@/lib/auth";
 import { fetchBlockingBookings } from "@/lib/booking-lifecycle";
-import { AVAILABILITY_LABELS, getPropertyAvailabilityState, toBookingRange } from "@/lib/booking-utils";
+import { getPropertyAvailabilityState, toBookingRange } from "@/lib/booking-utils";
 import { getHomepageAmenityPreview, parsePropertyDetails } from "@/lib/property-details";
 import { getSingleProperty } from "@/lib/property";
 import { prisma } from "@/lib/prisma";
-import { toToman } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
 export default async function HomePage() {
@@ -25,41 +24,32 @@ export default async function HomePage() {
     calendarAvailability = getPropertyAvailabilityState(bookings.map(toBookingRange));
   }
 
-  const features = [
-    { icon: Shield, title: "تایید توسط مدیر", description: "هر رزرو پس از بارگذاری رسید توسط ادمین بررسی می‌شود" },
-    { icon: Clock, title: "رزرو شفاف", description: "انتخاب تاریخ، مهلت ۲ ساعته برای پرداخت، و پیگیری وضعیت در همین سامانه" },
-    { icon: Users, title: "ویژه کارمندان", description: "دسترسی داخلی — پس از تایید رزرو، شماره تماس پشتیبانی نمایش داده می‌شود" },
-  ];
-
   const details = property ? parsePropertyDetails(property.detailsJson) : null;
   const amenityPreview = details ? getHomepageAmenityPreview(details) : [];
-  const locationLine = property?.address ?? "";
-
-  const stats = [
-    { number: "۱", label: "ویلای سازمانی" },
-    { number: "۲", label: "سرویس خواب" },
-    { number: String(property?.capacity ?? 5), label: "ظرفیت (نفر)" },
-    { number: "۲", label: "ساعت مهلت پرداخت" },
-  ];
 
   return (
     <div>
       <section className="relative min-h-[85vh] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1a365d] via-[#2d4a3e] to-[#1a365d]" />
-        <div className="absolute inset-0 opacity-15" style={{ backgroundImage: "radial-gradient(#ffffff33 1px, transparent 1px)", backgroundSize: "30px 30px" }} />
+        <Image src="/brand/hero-shepherd.jpg" alt="دیار" fill className="object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 lg:grid-cols-2">
+        <div className="relative mx-auto max-w-4xl px-4 py-24">
           <div className="space-y-8 text-white">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#c9a227]/20 px-4 py-2 text-[#c9a227]">
-              <Building2 className="h-5 w-5" /> ویژه کارمندان شرکت
-            </div>
-
             <h1 className="text-3xl font-black leading-tight sm:text-4xl md:text-6xl">
               رزرو <span className="text-[#c9a227]">ویلای سازمانی</span> دیار
             </h1>
-            <p className="max-w-xl text-lg text-gray-200 md:text-xl">
-              سامانه داخلی رزرو ویلای مازندران برای کارمندان — مشاهده جزئیات، انتخاب تاریخ و ثبت درخواست اقامت.
-            </p>
+            <div className="max-w-xl space-y-4 text-lg text-gray-100 md:text-xl">
+              <p>
+                دیار از یک ایده شروع شد؛<br />
+                اینکه جایی باشه برای چند لحظه آسودن.<br />
+                جایی که بین شلوغی شهر و فشار کار، گاهی بایستید، نفس عمیقی بکشید و دوباره حضور در لحظه را حس کنید.
+              </p>
+              <p>
+                دیار برای ما فقط یک اسم نیست؛<br />
+                حسِ خانه است.<br />
+                همان جایی که آدم دلش می‌خواهد چراغش همیشه روشن بماند.
+              </p>
+            </div>
 
             <div className="flex flex-wrap gap-4">
               {property && (
@@ -67,73 +57,64 @@ export default async function HomePage() {
                   href={user ? `/properties/${property.id}` : "/login"}
                   className="btn-secondary inline-flex items-center gap-2"
                 >
-                  مشاهده ویلا و رزرو <ArrowLeft className="h-4 w-4" />
+                  ورود به فرصت‌های دیار <ArrowLeft className="h-4 w-4" />
                 </Link>
               )}
             </div>
           </div>
-
-          <div>
-            {property && (
-              <div className="overflow-hidden rounded-2xl bg-white shadow-2xl">
-                <div className="relative h-64">
-                  <Image src={property.images[0] || "/placeholder-property.svg"} alt={property.title} fill className="object-cover" />
-                  <span className="absolute right-4 top-4 rounded-full bg-[#c9a227] px-3 py-1 text-sm text-white">
-                    {AVAILABILITY_LABELS[calendarAvailability]}
-                  </span>
-                </div>
-                <div className="space-y-3 p-6">
-                  <h3 className="text-xl font-bold text-[#1a365d]">{property.title}</h3>
-                  <p className="line-clamp-2 text-sm text-gray-600">{property.description}</p>
-                  {locationLine && (
-                    <p className="flex items-center gap-1 text-xs text-gray-500">
-                      <MapPin className="h-3.5 w-3.5 shrink-0" />
-                      <span className="line-clamp-1">{locationLine}</span>
-                    </p>
-                  )}
-                  <div className="flex flex-wrap gap-1.5">
-                    <span className="rounded-full bg-[#1a365d]/10 px-2 py-0.5 text-xs text-[#1a365d]">
-                      {property.capacity ?? 5} نفر
-                    </span>
-                    <span className="rounded-full bg-[#1a365d]/10 px-2 py-0.5 text-xs text-[#1a365d]">
-                      {property.bedrooms ?? 2} خواب
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-lg font-bold text-[#c9a227]">{toToman(property.dailyPrice)}</p>
-                    <Link href={user ? `/properties/${property.id}` : "/login"} className="font-medium text-[#1a365d]">مشاهده جزئیات</Link>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-white py-14">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 md:grid-cols-4">
-          {stats.map((stat) => (
-            <div key={stat.label} className="text-center">
-              <p className="text-4xl font-black text-[#1a365d]">{stat.number}</p>
-              <p className="mt-2 text-gray-600">{stat.label}</p>
-            </div>
-          ))}
         </div>
       </section>
 
       <section className="py-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <h2 className="section-title mb-8 text-center">چرا ما را انتخاب کنید؟</h2>
-          <div className="grid gap-6 md:grid-cols-3">
-            {features.map((f) => (
-              <div key={f.title} className="card card-hover">
-                <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1a365d]/10 text-[#1a365d]">
-                  <f.icon className="h-7 w-7" />
-                </div>
-                <h3 className="text-xl font-bold text-[#1a365d]">{f.title}</h3>
-                <p className="mt-2 text-gray-600">{f.description}</p>
-              </div>
-            ))}
+        <div className="mx-auto max-w-3xl space-y-6 px-4 text-lg leading-relaxed text-gray-700">
+          <p>
+            دیار برای ما، تکه‌ای از دلِ ماست؛<br />
+            و دوست داریم هر روز بزرگ‌تر شود…<br />
+            نه فقط در ظاهر، بلکه در حس خوبی که منتقل می‌کند، در خاطره‌هایی که می‌سازد و در آرامشی که به آدم‌ها هدیه می‌دهد.
+          </p>
+          <p>
+            البته این تازه شروع راه ماست.<br />
+            قراره در دیار اتفاق‌های جذاب‌تری شکل بگیره، آدم‌های بیشتری همراه بشوند و اینجا، هر روز بیشتر از قبل، رنگِ زندگی به خودش بگیره.
+          </p>
+          <p>
+            دیار، ثمره‌ی کلید ماست؛<br />
+            بخشی از فکرها، تصمیم‌ها، سلیقه و حال خوب ما.<br />
+            جایی که با دقت انتخاب شده، آرام‌آرام شکل گرفته و حالا با عشق و حس خوب، آماده‌ی میزبانی از شماست.
+          </p>
+          <p>
+            قدم‌تون روی چشم.<br />
+            خوش اومدید به دیار.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-16">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 lg:grid-cols-2">
+          <div className="relative h-72 overflow-hidden rounded-2xl shadow-lg lg:h-96">
+            <Image src="/brand/why-diar-window.jpg" alt="چرا دیار؟" fill className="object-cover" />
+          </div>
+          <div className="space-y-4 text-lg leading-relaxed text-gray-700">
+            <h2 className="section-title mb-4">چرا دیار؟</h2>
+            <p>
+              دیار یعنی<br />
+              جایی که حضور، مهم‌تر از سرعت است.<br />
+              جایی که بودن، ارزشمندتر از رسیدن است.
+            </p>
+            <p>
+              و ما باور داریم<br />
+              هرجا که آدم‌ها لحظه‌ای حال خوب را تجربه کنند،<br />
+              همان‌جا دیار است؛<br />
+              حتی اگر اسمش را ندانند.
+            </p>
+            <p>
+              دیار را باید آرام ساخت…<br />
+              و آرام نگه داشت.<br />
+              با مراقبت، با حواس، با دل.
+            </p>
+            <p>
+              چون بعضی جاها فقط فضا نیستند…<br />
+              تکه‌ای از زندگی‌اند.
+            </p>
           </div>
         </div>
       </section>
@@ -177,12 +158,6 @@ export default async function HomePage() {
                       ))}
                     </div>
                   )}
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <p className="text-lg font-bold text-[#c9a227]">{toToman(property.dailyPrice)} در روز</p>
-                    <span className="text-sm text-gray-500">
-                      ظرفیت {property.capacity ?? 5} نفر · {property.bedrooms ?? 2} خواب
-                    </span>
-                  </div>
                 </div>
               </Link>
             </div>
@@ -204,22 +179,6 @@ export default async function HomePage() {
               </Link>
             )}
           </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 pb-16">
-        <h2 className="section-title mb-6">مزایای خدمات</h2>
-        <div className="grid gap-3 md:grid-cols-2">
-          {[
-            "ورود با شماره تماس و رمز اختصاصی کارمندان",
-            "انتخاب تاریخ ورود و خروج (ظهر به وقت ایران)",
-            "مهلت ۲ ساعته برای بارگذاری رسید پرداخت",
-            "پیگیری وضعیت: در انتظار پرداخت، تایید، رد یا منقضی",
-            "نمایش شماره تماس پس از تایید نهایی رزرو",
-            "مدیریت متمرکز توسط یک ادمین سامانه",
-          ].map((item) => (
-            <div key={item} className="flex items-center gap-2 text-gray-700"><CheckCircle className="h-5 w-5 text-[#c9a227]" /> {item}</div>
-          ))}
         </div>
       </section>
     </div>
