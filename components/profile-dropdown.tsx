@@ -27,12 +27,12 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-slate-200 bg-white shadow-lg">
+        <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-line bg-canvas-raised shadow-lg">
           <div className="py-1">
             {user.role === "employee" && (
               <Link
                 href="/bookings"
-                className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-sm text-charcoal-muted hover:bg-canvas transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 رزروهای من
@@ -40,7 +40,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
             )}
             <Link
               href={user.role === "admin" ? "/admin" : "/dashboard"}
-              className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-sm text-charcoal-muted hover:bg-canvas transition-colors"
               onClick={() => setIsOpen(false)}
             >
               <User className="h-4 w-4" />
