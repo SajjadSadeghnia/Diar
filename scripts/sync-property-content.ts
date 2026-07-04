@@ -7,6 +7,7 @@ import {
   DEFAULT_PROPERTY_DETAILS,
   GANJE_FULL_ADDRESS,
   GANJE_MAP_URL,
+  GANJE_PROPERTY_DESCRIPTION,
   GANJE_PROPERTY_IMAGES,
   GANJE_PROPERTY_TITLE,
 } from "../lib/property-details";
@@ -51,8 +52,7 @@ async function main() {
     where: { id: propertyId },
     data: {
       title: GANJE_PROPERTY_TITLE,
-      description:
-        "واحد سازمانی در شهر نور، مجتمع نگین نور — دسترسی به دریا از درب شهرک، نزدیک سوپرمارکت و رستوران، مناسب اقامت خانواده کارمندان.",
+      description: GANJE_PROPERTY_DESCRIPTION,
       address: GANJE_FULL_ADDRESS,
       images: [...GANJE_PROPERTY_IMAGES],
       capacity: 5,

@@ -26,10 +26,13 @@ export const DEFAULT_PROPERTY_DETAILS: PropertyDetailsJson = {
 
 export const GANJE_MAP_URL = "https://nshn.ir/QbfZVc0FYupS";
 
-export const GANJE_PROPERTY_TITLE = "ویلا آپارتمان مازندران";
+export const GANJE_PROPERTY_TITLE = "دیار ۱";
+
+export const GANJE_PROPERTY_DESCRIPTION =
+  "اقامات در فضایی آرام با دسترسی مستقيم به ساحل از درب شهرک، در مجاورت سوپرمارکت و رستوران های محلی ";
 
 export const GANJE_FULL_ADDRESS =
-  "مازندران، شهر نور، خیابان امام رضا، مجتمع نگین نور، بلوک ۱، طبقه چهار، واحد ۱۴";
+  "أدرس : مازندران، شهر نور، خیابان امام رضا، مجتمع نگین نور، بلوک ۱، طبقه چهار، واحد ۱۴";
 
 export const GANJE_PROPERTY_IMAGES = [
   "/uploads/properties/ganje-10-bedroom.png",
