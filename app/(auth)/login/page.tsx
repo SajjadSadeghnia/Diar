@@ -43,20 +43,20 @@ export default function LoginPage() {
       <div className="flex flex-1 items-center justify-center p-8">
         <div className="w-full max-w-md">
           <div className="mb-8 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#1a365d]">
-              <Building2 className="h-8 w-8 text-[#c9a227]" />
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-ink">
+              <Building2 className="h-8 w-8 text-white" />
             </div>
-            <h1 className="mb-2 text-3xl font-bold text-[#1a365d]">ورود به حساب کاربری</h1>
-            <p className="text-gray-600">ورود کارمندان و مدیر سامانه برای رزرو ویلای سازمانی</p>
+            <h1 className="font-display mb-2 text-3xl font-semibold text-ink">ورود به حساب کاربری</h1>
+            <p className="text-charcoal-muted">ورود کارمندان و مدیر سامانه برای رزرو ویلای سازمانی</p>
           </div>
 
-          {error && <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700">{error}</div>}
+          {error && <div className="mb-6 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700">{error}</div>}
 
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">اطلاعات کاربر</label>
+              <label className="mb-2 block text-sm font-medium text-charcoal-muted">اطلاعات کاربر</label>
               <div className="relative">
-                <Phone className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                <Phone className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-charcoal-muted/50" />
                 <input
                   className="input pr-11 text-base"
                   type="tel"
@@ -72,9 +72,9 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">رمز عبور</label>
+              <label className="mb-2 block text-sm font-medium text-charcoal-muted">رمز عبور</label>
               <div className="relative">
-                <Lock className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                <Lock className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-charcoal-muted/50" />
                 <input
                   className="input pr-11 pl-10 text-base"
                   type={showPassword ? "text" : "password"}
@@ -87,7 +87,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((s) => !s)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-muted/50"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
