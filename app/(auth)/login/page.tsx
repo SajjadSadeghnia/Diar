@@ -94,7 +94,10 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <button className="btn-primary min-h-12 w-full py-3 text-base" disabled={loading}>
+            <button
+              className="btn-primary min-h-12 w-full py-3 text-base duration-200 hover:-translate-y-0.5 hover:brightness-110"
+              disabled={loading}
+            >
               {loading ? "در حال ورود..." : "ورود به حساب"}
             </button>
           </form>

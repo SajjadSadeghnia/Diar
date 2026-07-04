@@ -53,10 +53,11 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
           }}
         >
           <Image
+            key={gallery[index]}
             src={gallery[index]}
             alt={`${title} — تصویر ${index + 1}`}
             fill
-            className="object-cover transition-opacity duration-300"
+            className="animate-fade-in-fast object-cover"
             sizes="(max-width: 1024px) 100vw, 70vw"
             priority
           />
@@ -150,7 +151,14 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
             className="relative h-[min(85vh,720px)] w-full max-w-5xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <Image src={gallery[index]} alt={title} fill className="object-contain" sizes="100vw" />
+            <Image
+              key={gallery[index]}
+              src={gallery[index]}
+              alt={title}
+              fill
+              className="animate-fade-in-fast object-contain"
+              sizes="100vw"
+            />
           </div>
           <p className="absolute bottom-6 text-sm text-white/80">
             {index + 1} از {gallery.length}

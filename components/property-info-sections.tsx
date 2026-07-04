@@ -144,7 +144,7 @@ export function PropertyInfoSections({
             return (
               <div
                 key={a.key}
-                className={`rounded-xl border p-3 text-center text-sm ${
+                className={`rounded-xl border p-3 text-center text-sm transition-shadow duration-200 hover:shadow-md ${
                   available
                     ? "border-emerald-200 bg-emerald-50 text-emerald-900"
                     : "border-slate-200 bg-slate-50 text-slate-500"

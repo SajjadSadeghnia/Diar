@@ -278,7 +278,7 @@ export default function PropertyDetailPage() {
 
             <button
               type="button"
-              className="btn-primary min-h-12 w-full text-base"
+              className="btn-primary min-h-12 w-full text-base duration-200 hover:-translate-y-0.5 hover:brightness-110"
               onClick={startReservation}
               disabled={!canSubmit}
             >
