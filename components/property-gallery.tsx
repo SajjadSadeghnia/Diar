@@ -41,7 +41,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
     <>
       <div className="space-y-3">
         <div
-          className="group relative aspect-[16/10] overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm touch-pan-y"
+          className="radius-photo group relative aspect-[16/10] overflow-hidden border border-line bg-canvas shadow-sm touch-pan-y"
           onTouchStart={(e) => {
             touchStartX.current = e.touches[0]?.clientX ?? null;
           }}
@@ -102,7 +102,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
                 type="button"
                 onClick={() => setIndex(i)}
                 className={`relative h-16 w-24 shrink-0 snap-start overflow-hidden rounded-lg border-2 transition ${
-                  i === index ? "border-[#1a365d]" : "border-transparent opacity-70 hover:opacity-100"
+                  i === index ? "border-ink" : "border-transparent opacity-70 hover:opacity-100"
                 }`}
               >
                 <Image src={src} alt="" fill className="object-cover" sizes="96px" />

@@ -34,13 +34,13 @@ function DetailRow({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex gap-3 rounded-xl border border-slate-100 bg-slate-50/80 p-4">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#1a365d]/10 text-[#1a365d]">
+    <div className="flex gap-3 rounded-xl border border-line/60 bg-canvas/60 p-4">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-ink/10 text-ink">
         <Icon className="h-5 w-5" />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold text-[#1a365d]">{label}</p>
-        <div className="mt-1 text-sm text-slate-600 leading-relaxed">{children}</div>
+        <p className="text-sm font-semibold text-ink">{label}</p>
+        <div className="mt-1 text-sm text-charcoal-muted leading-relaxed">{children}</div>
       </div>
     </div>
   );
@@ -59,7 +59,7 @@ export function PropertyInfoSections({
   return (
     <div className="space-y-6">
       <section className="card">
-        <h2 className="mb-4 text-lg font-bold text-[#1a365d]">اطلاعات کلی واحد</h2>
+        <h2 className="mb-4 text-lg font-bold text-ink">اطلاعات کلی واحد</h2>
         <div className="grid gap-3 sm:grid-cols-2">
           <DetailRow icon={Users} label="ظرفیت (تعداد نفرات)">
             {capacity} نفر
@@ -83,7 +83,7 @@ export function PropertyInfoSections({
                 href={mapUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 inline-flex items-center gap-2 rounded-xl bg-[#1a365d] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#1a365d]/90"
+                className="mt-3 inline-flex items-center gap-2 rounded-lg bg-ink px-4 py-2 text-sm font-medium text-white transition hover:bg-ink-hover"
               >
                 <ExternalLink className="h-4 w-4" />
                 مشاهده موقعیت روی نقشه
@@ -94,8 +94,8 @@ export function PropertyInfoSections({
       </section>
 
       <section className="card">
-        <h2 className="mb-4 text-lg font-bold text-[#1a365d]">دسترسی و موقعیت مکانی</h2>
-        <p className="mb-3 text-sm text-slate-600">کاملاً در دسترس و نزدیک به:</p>
+        <h2 className="mb-4 text-lg font-bold text-ink">دسترسی و موقعیت مکانی</h2>
+        <p className="mb-3 text-sm text-charcoal-muted">کاملاً در دسترس و نزدیک به:</p>
         <ul className="grid gap-2 sm:grid-cols-3">
           {details.accessNearby.map((item) => (
             <li
@@ -110,11 +110,11 @@ export function PropertyInfoSections({
       </section>
 
       <section className="card">
-        <h2 className="mb-4 text-lg font-bold text-[#1a365d]">پارکینگ</h2>
+        <h2 className="mb-4 text-lg font-bold text-ink">پارکینگ</h2>
         <ul className="space-y-2">
           {details.parking.map((item) => (
-            <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
-              <Car className="mt-0.5 h-4 w-4 shrink-0 text-[#1a365d]" />
+            <li key={item} className="flex items-start gap-2 text-sm text-charcoal-muted">
+              <Car className="mt-0.5 h-4 w-4 shrink-0 text-ink" />
               {item}
             </li>
           ))}
@@ -122,14 +122,14 @@ export function PropertyInfoSections({
       </section>
 
       <section className="card">
-        <h2 className="mb-4 text-lg font-bold text-[#1a365d]">لوازم سرو غذا</h2>
+        <h2 className="mb-4 text-lg font-bold text-ink">لوازم سرو غذا</h2>
         <div className="flex flex-wrap gap-2">
           {details.diningItems.map((item) => (
             <span
               key={item}
-              className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-700"
+              className="inline-flex items-center gap-1 rounded-full border border-line bg-canvas-raised px-3 py-1.5 text-sm text-charcoal-muted"
             >
-              <UtensilsCrossed className="h-3.5 w-3.5 text-[#c9a227]" />
+              <UtensilsCrossed className="h-3.5 w-3.5 text-clay-soft" />
               {item}
             </span>
           ))}
@@ -137,7 +137,7 @@ export function PropertyInfoSections({
       </section>
 
       <section className="card">
-        <h2 className="mb-4 text-lg font-bold text-[#1a365d]">امکانات و تجهیزات</h2>
+        <h2 className="mb-4 text-lg font-bold text-ink">امکانات و تجهیزات</h2>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
           {details.amenities.map((a) => {
             const available = a.value === "دارد";
@@ -147,14 +147,14 @@ export function PropertyInfoSections({
                 className={`rounded-xl border p-3 text-center text-sm transition-shadow duration-200 hover:shadow-md ${
                   available
                     ? "border-emerald-200 bg-emerald-50 text-emerald-900"
-                    : "border-slate-200 bg-slate-50 text-slate-500"
+                    : "border-line bg-canvas text-charcoal-muted"
                 }`}
               >
                 <div className="mb-1 flex justify-center">
                   {available ? (
                     <CheckCircle2 className="h-5 w-5 text-emerald-600" />
                   ) : (
-                    <XCircle className="h-5 w-5 text-slate-400" />
+                    <XCircle className="h-5 w-5 text-charcoal-muted/50" />
                   )}
                 </div>
                 <p className="font-medium">{a.label}</p>

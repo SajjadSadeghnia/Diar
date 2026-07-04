@@ -185,16 +185,16 @@ export default function PropertyDetailPage() {
 
       <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-black text-[#1a365d] md:text-3xl">{property.title}</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">{property.description}</p>
+          <h1 className="font-display text-2xl font-semibold text-ink md:text-3xl">{property.title}</h1>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-charcoal-muted">{property.description}</p>
           <div className="mt-3 flex flex-wrap gap-2">
-            <span className="rounded-full bg-[#1a365d]/10 px-3 py-1 text-xs font-medium text-[#1a365d]">
+            <span className="rounded-full bg-ink/10 px-3 py-1 text-xs font-medium text-ink">
               ظرفیت {property.capacity} نفر
             </span>
-            <span className="rounded-full bg-[#1a365d]/10 px-3 py-1 text-xs font-medium text-[#1a365d]">
+            <span className="rounded-full bg-ink/10 px-3 py-1 text-xs font-medium text-ink">
               {property.bedrooms} خواب
             </span>
-            <span className="rounded-full bg-[#c9a227]/20 px-3 py-1 text-sm font-bold text-[#1a365d]">
+            <span className="rounded-full bg-clay/10 px-3 py-1 text-sm font-bold text-clay">
               {toToman(property.dailyPrice)} / هر شب
             </span>
           </div>
@@ -219,14 +219,14 @@ export default function PropertyDetailPage() {
 
         <div className="order-1 lg:order-2 lg:col-span-1">
           <div className="card space-y-4 lg:sticky lg:top-4">
-            <h2 className="text-lg font-bold text-[#1a365d]">رزرو اقامت</h2>
+            <h2 className="font-display text-lg font-semibold text-ink">رزرو اقامت</h2>
 
             {!propertyOpen && (
-              <p className="rounded-xl bg-rose-50 p-3 text-sm text-rose-700">رزرو این ویلا توسط ادمین غیرفعال شده است.</p>
+              <p className="rounded-lg bg-rose-50 p-3 text-sm text-rose-700">رزرو این ویلا توسط ادمین غیرفعال شده است.</p>
             )}
 
             {availability && propertyOpen && (
-              <div className="rounded-xl bg-slate-50 p-3 text-sm text-slate-700 space-y-1">
+              <div className="rounded-lg bg-canvas p-3 text-sm text-charcoal-muted space-y-1">
                 <p>
                   <span className="font-medium">راهنمای تقویم:</span>{" "}
                   {startDate && endDate ? selection.message : GLOBAL_HINT[availability.availability]}
@@ -234,7 +234,7 @@ export default function PropertyDetailPage() {
                 <p>حداکثر اقامت: {availability.maxStayDays} روز</p>
                 <p>مهلت تکمیل پرداخت: {availability.paymentHoldHours} ساعت</p>
                 {blockedRanges.length > 0 && (
-                  <p className="text-slate-500">
+                  <p className="text-charcoal-muted/70">
                     {blockedRanges.filter((r) => r.type === "reserved").length} بازه رزرو شده،{" "}
                     {blockedRanges.filter((r) => r.type === "temporary").length} بازه موقت
                   </p>
@@ -244,7 +244,7 @@ export default function PropertyDetailPage() {
 
             <div className={`grid gap-3 ${pickerDisabled ? "pointer-events-none opacity-50" : ""}`}>
               <div>
-                <label className="mb-1 block text-xs text-slate-500">تاریخ ورود</label>
+                <label className="mb-1 block text-xs text-charcoal-muted/70">تاریخ ورود</label>
                 <DatePicker
                   calendar={persian}
                   locale={persian_fa}
@@ -257,7 +257,7 @@ export default function PropertyDetailPage() {
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-slate-500">تاریخ خروج</label>
+                <label className="mb-1 block text-xs text-charcoal-muted/70">تاریخ خروج</label>
                 <DatePicker
                   calendar={persian}
                   locale={persian_fa}
@@ -295,7 +295,7 @@ export default function PropertyDetailPage() {
 
             <button
               type="button"
-              className="text-xs text-blue-700 underline"
+              className="text-xs text-ink underline"
               onClick={() => loadAvailability()}
             >
               بروزرسانی وضعیت تقویم
