@@ -11,15 +11,12 @@ export const DEFAULT_PROPERTY_DETAILS: PropertyDetailsJson = {
   accessNearby: ["پمپ بنزین", "رستوران", "سوپرمارکت"],
   parking: [
     "یک پارکینگ اختصاصی",
-    "در صورت خلوت بودن شهرک، پارکینگ مهمان نیز قابل استفاده است",
+    "برخورداری از پارکینگ میهمان در صورت خلوت بودن شهرک",
   ],
   diningItems: ["بشقاب", "قاشق", "چنگال", "یک قابلمه", "یک ماهیتابه"],
   amenities: [
     { key: "terrace", label: "تراس", value: "دارد" },
     { key: "cooking", label: "وسایل پخت و پز", value: "محدود" },
-    { key: "vacuum", label: "جاروبرقی", value: "دارد" },
-    { key: "wardrobe", label: "کمد", value: "دارد" },
-    { key: "hanger", label: "جالباسی", value: "دارد" },
     { key: "bbq", label: "باربیکیو", value: "دارد" },
     { key: "green", label: "فضای سبز", value: "دارد" },
     { key: "guard", label: "نگهبان", value: "دارد" },
@@ -35,6 +32,7 @@ export const GANJE_FULL_ADDRESS =
   "مازندران، شهر نور، خیابان امام رضا، مجتمع نگین نور، بلوک ۱، طبقه چهار، واحد ۱۴";
 
 export const GANJE_PROPERTY_IMAGES = [
+  "/uploads/properties/ganje-10-bedroom.png",
   "/uploads/properties/ganje-01-entrance.png",
   "/uploads/properties/ganje-02-complex.png",
   "/uploads/properties/ganje-03-sea-view.png",
@@ -44,7 +42,6 @@ export const GANJE_PROPERTY_IMAGES = [
   "/uploads/properties/ganje-07-kitchen.png",
   "/uploads/properties/ganje-08-fireplace.png",
   "/uploads/properties/ganje-09-bedroom.png",
-  "/uploads/properties/ganje-10-bedroom.png",
   "/uploads/properties/ganje-11-bedroom.png",
   "/uploads/properties/ganje-12-bathroom.png",
 ] as const;
