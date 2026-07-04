@@ -145,12 +145,12 @@ export default function PaymentPage() {
 
   return (
     <div className="mx-auto mt-6 max-w-xl px-4 pb-6">
-      <Link href="/bookings" className="mb-4 inline-flex text-sm text-blue-700">
+      <Link href="/bookings" className="mb-4 inline-flex text-sm text-ink">
         بازگشت به رزروها
       </Link>
       <div className="card">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-          <h1 className="text-xl font-black">پرداخت و بارگذاری فیش</h1>
+          <h1 className="font-display text-xl font-semibold text-ink">پرداخت و بارگذاری فیش</h1>
           {booking && <StatusBadge status={booking.status} size="md" />}
         </div>
 
@@ -159,7 +159,7 @@ export default function PaymentPage() {
         )}
 
         {booking && (
-          <div className="mb-4 space-y-2 rounded-xl bg-slate-50 p-3 text-sm">
+          <div className="mb-4 space-y-2 rounded-lg bg-canvas p-3 text-sm">
             <p>
               <span className="font-medium">ویلا:</span> {booking.property.title}
             </p>
@@ -179,7 +179,7 @@ export default function PaymentPage() {
         )}
 
         {expired && (
-          <div className="mb-4 space-y-3 rounded-xl bg-slate-100 p-4 text-sm text-slate-700">
+          <div className="mb-4 space-y-3 rounded-lg bg-canvas p-4 text-sm text-charcoal-muted">
             <p className="font-medium">مهلت پرداخت این رزرو به پایان رسیده است</p>
             <p>تاریخ‌های انتخاب‌شده آزاد شده‌اند. می‌توانید رزرو جدید ثبت کنید.</p>
             <Link href="/bookings" className="btn-secondary inline-flex min-h-11 text-sm">
@@ -197,7 +197,7 @@ export default function PaymentPage() {
             <Link
               href={booking.payment!.receiptPath}
               target="_blank"
-              className="inline-block font-semibold text-blue-700"
+              className="inline-block font-semibold text-ink"
             >
               مشاهده فیش در اندازه بزرگ
             </Link>
@@ -230,15 +230,18 @@ export default function PaymentPage() {
           <form onSubmit={submitPayment} className="space-y-3">
             <input className="input" type="number" placeholder="مبلغ پرداختی" value={amount} readOnly />
             <input
-              className="input min-h-12 file:mr-2 file:rounded-lg file:border-0 file:bg-[#1a365d] file:px-3 file:py-2 file:text-sm file:text-white"
+              className="input min-h-12 file:mr-2 file:rounded-lg file:border-0 file:bg-ink file:px-3 file:py-2 file:text-sm file:text-white"
               type="file"
               accept="image/jpeg,image/png,image/webp"
               onChange={(e) => setReceipt(e.target.files?.[0] || null)}
             />
-            <p className="text-xs text-slate-500">فرمت مجاز: JPG، PNG یا WEBP — حداکثر ۲ مگابایت</p>
+            <p className="text-xs text-charcoal-muted/70">فرمت مجاز: JPG، PNG یا WEBP — حداکثر ۲ مگابایت</p>
             {error && <p className="text-sm text-rose-600">{error}</p>}
             {success && <p className="text-sm text-emerald-600">{success}</p>}
-            <button className="btn-primary min-h-12 w-full text-base" disabled={loading || !!settingsError}>
+            <button
+              className="btn-primary min-h-12 w-full text-base duration-200 hover:-translate-y-0.5 hover:brightness-110"
+              disabled={loading || !!settingsError}
+            >
               {loading ? (
                 <span className="inline-flex items-center gap-2">
                   <span className="spinner" />
