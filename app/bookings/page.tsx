@@ -28,7 +28,7 @@ export default async function BookingsPage() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-6">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <h1 className="text-xl font-black">رزروهای من</h1>
+        <h1 className="font-display text-xl font-semibold text-ink">رزروهای من</h1>
         {user.role === "employee" && (
           <Link href={reserveHref} className="btn-primary min-h-11 text-sm">
             رزرو جدید
@@ -40,11 +40,11 @@ export default async function BookingsPage() {
         {bookings.map((b) => (
           <div key={b.id} className="card">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 className="font-bold text-[#1a365d]">{b.property.title}</h2>
+              <h2 className="font-display font-semibold text-ink">{b.property.title}</h2>
               <StatusBadge status={getBookingDisplayStatus(b)} />
             </div>
 
-            <div className="mt-3 grid gap-2 text-sm text-slate-700 md:grid-cols-2">
+            <div className="mt-3 grid gap-2 text-sm text-charcoal-muted md:grid-cols-2">
               <p>
                 <span className="font-medium">تاریخ اقامت:</span> {toJalaliDate(b.startDate)} تا{" "}
                 {toJalaliDate(b.endDate)}
@@ -57,16 +57,16 @@ export default async function BookingsPage() {
                   شماره تماس پشتیبانی: {b.property.contactPhone}
                 </p>
               ) : b.status === "expired" ? (
-                <p className="text-slate-500 md:col-span-2">مهلت پرداخت تمام شده — تاریخ آزاد است.</p>
+                <p className="text-charcoal-muted md:col-span-2">مهلت پرداخت تمام شده — تاریخ آزاد است.</p>
               ) : b.status !== "pending_payment" ? (
                 <p className="text-amber-700 md:col-span-2">شماره تماس پس از تایید رزرو نمایش داده می‌شود.</p>
               ) : null}
             </div>
 
             {b.payment && b.status !== "pending_payment" ? (
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl bg-slate-50 p-3 text-sm">
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-canvas p-3 text-sm">
                 <p>فیش واریزی ثبت شده است.</p>
-                <Link href={b.payment.receiptPath} target="_blank" className="font-semibold text-blue-700">
+                <Link href={b.payment.receiptPath} target="_blank" className="font-semibold text-ink">
                   مشاهده فیش
                 </Link>
               </div>
@@ -86,7 +86,7 @@ export default async function BookingsPage() {
         ))}
 
         {!bookings.length && (
-          <div className="card text-center text-slate-500">رزروی ثبت نشده است.</div>
+          <div className="card text-center text-charcoal-muted">رزروی ثبت نشده است.</div>
         )}
       </div>
     </main>
