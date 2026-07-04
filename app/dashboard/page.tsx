@@ -39,23 +39,23 @@ export default async function DashboardPage() {
     <main className="mx-auto max-w-6xl space-y-4 px-4 py-6">
       <div className="grid gap-4 md:grid-cols-3">
         <div className="card">
-          <p className="text-slate-500">ویلای سازمانی</p>
-          <p className="mt-2 text-lg font-black">{property?.title || "تنظیم نشده"}</p>
+          <p className="text-charcoal-muted">ویلای سازمانی</p>
+          <p className="mt-2 text-lg font-bold text-ink">{property?.title || "تنظیم نشده"}</p>
         </div>
         <div className="card">
-          <p className="text-slate-500">تعداد رزروهای من</p>
-          <p className="mt-2 text-2xl font-black">{bookingsCount}</p>
+          <p className="text-charcoal-muted">تعداد رزروهای من</p>
+          <p className="mt-2 text-2xl font-bold text-ink">{bookingsCount}</p>
         </div>
         <div className="card">
-          <p className="text-slate-500">در انتظار پرداخت</p>
+          <p className="text-charcoal-muted">در انتظار پرداخت</p>
           <p className="mt-2 text-2xl font-black text-amber-700">{pendingBookings.length}</p>
         </div>
       </div>
 
       {pendingBookings.length > 0 && (
         <section className="card">
-          <h2 className="text-lg font-black text-[#1a365d]">رزروهای در جریان</h2>
-          <p className="mt-1 text-sm text-slate-600">
+          <h2 className="font-display text-lg font-semibold text-ink">رزروهای در جریان</h2>
+          <p className="mt-1 text-sm text-charcoal-muted">
             اگر فیش بارگذاری نشده، مهلت ۲ ساعته برای آپلود دارید؛ پس از ثبت فیش، در انتظار بررسی ادمین می‌مانید.
           </p>
           <div className="mt-4 space-y-4">
@@ -65,7 +65,7 @@ export default async function DashboardPage() {
                   <p className="font-bold">{b.property.title}</p>
                   <StatusBadge status={getBookingDisplayStatus(b)} />
                 </div>
-                <p className="mt-2 text-sm text-slate-700">
+                <p className="mt-2 text-sm text-charcoal-muted">
                   {toJalaliDate(b.startDate)} تا {toJalaliDate(b.endDate)} — {toToman(b.totalPrice)}
                 </p>
                 <BookingPaymentStatus
@@ -84,8 +84,8 @@ export default async function DashboardPage() {
 
       <div className="card">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-lg font-black">میان‌برها</h2>
-          <Link className="btn-primary min-h-11 text-sm" href={reserveHref}>
+          <h2 className="font-display text-lg font-semibold text-ink">میان‌برها</h2>
+          <Link className="btn-primary min-h-11 text-sm duration-200 hover:-translate-y-0.5 hover:brightness-110" href={reserveHref}>
             رزرو جدید
           </Link>
         </div>
@@ -106,7 +106,7 @@ export default async function DashboardPage() {
           )}
         </div>
         {lastBooking && (
-          <p className="mt-3 text-sm text-slate-600">
+          <p className="mt-3 text-sm text-charcoal-muted">
             آخرین رزرو: {lastBooking.property.title} — {toToman(lastBooking.totalPrice)}
           </p>
         )}
