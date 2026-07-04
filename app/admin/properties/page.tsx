@@ -92,8 +92,8 @@ export default function AdminPropertiesPage() {
       </Link>
 
       <div className="card">
-        <h1 className="mb-2 text-lg font-black">ویرایش ویلای سازمانی</h1>
-        <p className="mb-4 text-sm text-slate-600">
+        <h1 className="font-display mb-2 text-lg font-semibold text-ink">ویرایش ویلای سازمانی</h1>
+        <p className="mb-4 text-sm text-charcoal-muted">
           سامانه دیار فقط یک ملک دارد. در این بخش می‌توانید اطلاعات همان ملک را ویرایش کنید.
         </p>
 
@@ -101,7 +101,7 @@ export default function AdminPropertiesPage() {
           <p className="text-amber-700">ملکی ثبت نشده است. برای محیط توسعه، دستور seed را اجرا کنید.</p>
         ) : (
           <>
-            <div className="relative mb-4 h-48 overflow-hidden rounded-xl border border-slate-200">
+            <div className="radius-photo relative mb-4 h-48 overflow-hidden border border-line">
               <Image
                 src={property.images[0] || "/placeholder-property.svg"}
                 alt={property.title}

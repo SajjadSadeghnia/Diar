@@ -49,10 +49,10 @@ export function AdminPaymentSettingsModal({ initialCardNumber, initialInstructio
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4">
-          <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4">
+          <div className="w-full max-w-2xl rounded-2xl border border-line bg-canvas-raised p-5 shadow-2xl">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-black">ویرایش تنظیمات پرداخت</h3>
+              <h3 className="text-lg font-bold text-ink">ویرایش تنظیمات پرداخت</h3>
               <button className="btn-secondary" onClick={() => setOpen(false)}>بستن</button>
             </div>
 

@@ -109,19 +109,19 @@ export default async function AdminDashboard() {
   return (
     <main className="mx-auto max-w-7xl space-y-6 px-4 py-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#1a365d] mb-2">داشبورد مدیریت دیار</h1>
-        <p className="text-slate-600">مدیریت ویلا، رزروها و پرداخت‌های کارمندان</p>
+        <h1 className="font-display text-3xl font-semibold text-ink mb-2">داشبورد مدیریت دیار</h1>
+        <p className="text-charcoal-muted">مدیریت ویلا، رزروها و پرداخت‌های کارمندان</p>
       </div>
 
       <section className="grid gap-6 md:grid-cols-3">
-        <div className="card group hover:border-[#c9a227]/20 transition-all duration-300">
+        <div className="card group hover:border-ink/15 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-slate-600 mb-1">ویلای سازمانی</p>
-              <p className="text-lg font-bold text-[#1a365d]">{property?.title || "تنظیم نشده"}</p>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-sm font-medium text-charcoal-muted mb-1">ویلای سازمانی</p>
+              <p className="text-lg font-bold text-ink">{property?.title || "تنظیم نشده"}</p>
+              <p className="text-xs text-charcoal-muted/70 mt-1">
                 {property ? (
-                  <Link href="/admin/properties" className="text-blue-700 hover:underline">
+                  <Link href="/admin/properties" className="text-ink hover:underline">
                     ویرایش ملک
                   </Link>
                 ) : (
@@ -129,34 +129,34 @@ export default async function AdminDashboard() {
                 )}
               </p>
             </div>
-            <div className="rounded-xl bg-[#1a365d]/10 p-3">
-              <Building2 className="h-6 w-6 text-[#1a365d]" />
+            <div className="rounded-lg bg-ink/10 p-3">
+              <Building2 className="h-6 w-6 text-ink" />
             </div>
           </div>
         </div>
 
-        <div className="card group hover:border-[#c9a227]/20 transition-all duration-300">
+        <div className="card group hover:border-ink/15 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-slate-600 mb-1">تعداد رزروها</p>
-              <p className="text-3xl font-bold text-[#1a365d]">{bookingCount}</p>
-              <p className="text-xs text-slate-500 mt-1">رزرو ثبت شده</p>
+              <p className="text-sm font-medium text-charcoal-muted mb-1">تعداد رزروها</p>
+              <p className="text-3xl font-bold text-ink">{bookingCount}</p>
+              <p className="text-xs text-charcoal-muted/70 mt-1">رزرو ثبت شده</p>
             </div>
-            <div className="rounded-xl bg-[#1a365d]/10 p-3">
-              <Calendar className="h-6 w-6 text-[#1a365d]" />
+            <div className="rounded-lg bg-ink/10 p-3">
+              <Calendar className="h-6 w-6 text-ink" />
             </div>
           </div>
         </div>
 
-        <div className="card group hover:border-[#c9a227]/20 transition-all duration-300">
+        <div className="card group hover:border-clay/25 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-slate-600 mb-1">پرداخت‌های در انتظار</p>
-              <p className="text-3xl font-bold text-[#c9a227]">{paymentCount}</p>
-              <p className="text-xs text-slate-500 mt-1">نیاز به بررسی</p>
+              <p className="text-sm font-medium text-charcoal-muted mb-1">پرداخت‌های در انتظار</p>
+              <p className="text-3xl font-bold text-clay">{paymentCount}</p>
+              <p className="text-xs text-charcoal-muted/70 mt-1">نیاز به بررسی</p>
             </div>
-            <div className="rounded-xl bg-[#c9a227]/10 p-3">
-              <Clock className="h-6 w-6 text-[#c9a227]" />
+            <div className="rounded-lg bg-clay/10 p-3">
+              <Clock className="h-6 w-6 text-clay" />
             </div>
           </div>
         </div>
@@ -164,16 +164,16 @@ export default async function AdminDashboard() {
 
       <section className="card">
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-[#1a365d] flex items-center gap-2">
-            <Settings className="h-5 w-5 text-[#c9a227]" />
+          <h2 className="text-xl font-bold text-ink flex items-center gap-2">
+            <Settings className="h-5 w-5 text-ink" />
             تنظیمات پرداخت
           </h2>
-          <p className="mt-2 text-sm text-slate-600">مدیریت کارت بانکی و دستورالعمل‌های پرداخت برای کارمندان</p>
+          <p className="mt-2 text-sm text-charcoal-muted">مدیریت کارت بانکی و دستورالعمل‌های پرداخت برای کارمندان</p>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-sm text-slate-500">شماره کارت فعلی:</p>
-            <p className="font-medium text-[#1a365d]">{setting?.cardNumber || "تنظیم نشده"}</p>
+            <p className="text-sm text-charcoal-muted/70">شماره کارت فعلی:</p>
+            <p className="font-medium text-ink">{setting?.cardNumber || "تنظیم نشده"}</p>
           </div>
           <AdminPaymentSettingsModal
             initialCardNumber={setting?.cardNumber || ""}
@@ -183,32 +183,32 @@ export default async function AdminDashboard() {
       </section>
 
       <section className="card">
-        <h2 className="text-lg font-bold text-[#1a365d] mb-4">وضعیت رزروها</h2>
+        <h2 className="text-lg font-bold text-ink mb-4">وضعیت رزروها</h2>
         <div className="flex flex-wrap gap-3">
-          <div className="rounded-xl bg-amber-50 px-4 py-2 text-sm">
+          <div className="rounded-lg bg-amber-50 px-4 py-2 text-sm">
             در انتظار پرداخت: <strong>{countByStatus.pending_payment ?? 0}</strong>
           </div>
-          <div className="rounded-xl bg-emerald-50 px-4 py-2 text-sm">
+          <div className="rounded-lg bg-emerald-50 px-4 py-2 text-sm">
             تایید شده: <strong>{countByStatus.approved ?? 0}</strong>
           </div>
-          <div className="rounded-xl bg-rose-50 px-4 py-2 text-sm">
+          <div className="rounded-lg bg-rose-50 px-4 py-2 text-sm">
             رد شده: <strong>{countByStatus.rejected ?? 0}</strong>
           </div>
-          <div className="rounded-xl bg-slate-100 px-4 py-2 text-sm">
+          <div className="rounded-lg bg-canvas px-4 py-2 text-sm">
             منقضی: <strong>{countByStatus.expired ?? 0}</strong>
           </div>
         </div>
-        <Link href="/admin/bookings" className="mt-3 inline-block text-sm text-blue-700">
+        <Link href="/admin/bookings" className="mt-3 inline-block text-sm text-ink">
           مشاهده همه رزروها
         </Link>
       </section>
 
       {pendingPaymentBookings.length > 0 && (
         <section className="card">
-          <h2 className="text-lg font-bold text-[#1a365d] mb-2">
+          <h2 className="text-lg font-bold text-ink mb-2">
             رزروهای در انتظار پرداخت ({pendingPaymentBookings.length})
           </h2>
-          <p className="text-sm text-slate-600 mb-4">
+          <p className="text-sm text-charcoal-muted mb-4">
             رزروهایی که هنوز تایید نشده‌اند — امکان رد بدون نیاز به رسید.
           </p>
           <div className="space-y-3">
@@ -227,7 +227,7 @@ export default async function AdminDashboard() {
                       <p className="text-amber-800">مهلت پرداخت: {formatRemainingMs(b.expiresAt, now)}</p>
                     )}
                     {b.payment && (
-                      <Link href={b.payment.receiptPath} target="_blank" className="text-sm font-medium text-blue-700">
+                      <Link href={b.payment.receiptPath} target="_blank" className="text-sm font-medium text-ink">
                         مشاهده رسید بارگذاری‌شده
                       </Link>
                     )}
@@ -243,7 +243,7 @@ export default async function AdminDashboard() {
               </div>
             ))}
           </div>
-          <Link href="/admin/bookings" className="mt-3 inline-block text-sm text-blue-700">
+          <Link href="/admin/bookings" className="mt-3 inline-block text-sm text-ink">
             مشاهده همه در صفحه رزروها
           </Link>
         </section>
@@ -251,27 +251,27 @@ export default async function AdminDashboard() {
 
       <section className="card">
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-[#1a365d] flex items-center gap-2">
-            <Clock className="h-5 w-5 text-[#c9a227]" />
+          <h2 className="text-xl font-bold text-ink flex items-center gap-2">
+            <Clock className="h-5 w-5 text-ink" />
             رسیدها و تایید رزروهای در انتظار
           </h2>
-          <p className="mt-2 text-sm text-slate-600">اطلاعات رزرو، کارمند و رسید واریز را بررسی و تایید/رد کنید.</p>
+          <p className="mt-2 text-sm text-charcoal-muted">اطلاعات رزرو، کارمند و رسید واریز را بررسی و تایید/رد کنید.</p>
         </div>
 
         <div className="space-y-6">
           {pendingPayments.map((p) => (
-            <div key={p.id} className="card-hover rounded-xl border border-slate-200/80 bg-white p-6 transition-all duration-300 hover:shadow-lg hover:border-[#c9a227]/20">
+            <div key={p.id} className="card-hover rounded-xl border border-line/80 bg-canvas-raised p-6 transition-all duration-300 hover:shadow-lg hover:border-ink/15">
               <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
                 <div>
-                  <h3 className="text-lg font-bold text-[#1a365d]">{p.booking.property.title}</h3>
+                  <h3 className="text-lg font-bold text-ink">{p.booking.property.title}</h3>
                   <div className="flex flex-wrap items-center gap-2 mt-1">
                     <StatusBadge status="awaiting_admin_review" size="md" />
-                    <span className="text-sm text-slate-500">{toJalaliDate(p.createdAt)}</span>
+                    <span className="text-sm text-charcoal-muted">{toJalaliDate(p.createdAt)}</span>
                   </div>
                 </div>
                 <div className="text-left">
-                  <p className="text-2xl font-bold text-[#c9a227]">{toToman(p.amount)}</p>
-                  <p className="text-xs text-slate-500">مبلغ پرداخت</p>
+                  <p className="text-2xl font-bold text-ink">{toToman(p.amount)}</p>
+                  <p className="text-xs text-charcoal-muted">مبلغ پرداخت</p>
                 </div>
               </div>
 
@@ -279,22 +279,22 @@ export default async function AdminDashboard() {
                 <EmployeeInfo name={p.booking.user.name} phone={p.booking.user.phone} />
                 <div className="space-y-2 text-sm">
                   <p>
-                    <span className="font-medium text-slate-700">ملک:</span> {p.booking.property.title}
+                    <span className="font-medium text-ink">ملک:</span> {p.booking.property.title}
                   </p>
                   <p>
-                    <span className="font-medium text-slate-700">بازه رزرو:</span>{" "}
+                    <span className="font-medium text-ink">بازه رزرو:</span>{" "}
                     {toJalaliDate(p.booking.startDate)} تا {toJalaliDate(p.booking.endDate)}
                   </p>
                   <p>
-                    <span className="font-medium text-slate-700">تماس پشتیبانی ملک:</span>{" "}
+                    <span className="font-medium text-ink">تماس پشتیبانی ملک:</span>{" "}
                     {p.booking.property.contactPhone}
                   </p>
                 </div>
               </div>
 
               <div className="mb-4">
-                <p className="text-sm font-medium text-slate-700 mb-2">رسید واریزی:</p>
-                <div className="rounded-lg border border-slate-200 overflow-hidden">
+                <p className="text-sm font-medium text-ink mb-2">رسید واریزی:</p>
+                <div className="rounded-lg border border-line overflow-hidden">
                   <Image
                     src={p.receiptPath}
                     alt="رسید واریزی"
@@ -331,24 +331,24 @@ export default async function AdminDashboard() {
 
           {!pendingPayments.length && (
             <div className="card flex flex-col items-center justify-center py-12 text-center">
-              <div className="rounded-full bg-slate-100 p-4 mb-4">
-                <Clock className="h-8 w-8 text-slate-400" />
+              <div className="rounded-full bg-canvas p-4 mb-4">
+                <Clock className="h-8 w-8 text-charcoal-muted/50" />
               </div>
-              <p className="text-slate-500 font-medium">در حال حاضر پرداخت در انتظار تایید وجود ندارد.</p>
-              <p className="text-sm text-slate-400 mt-2">همه پرداخت‌ها بررسی شده‌اند</p>
+              <p className="text-charcoal-muted font-medium">در حال حاضر پرداخت در انتظار تایید وجود ندارد.</p>
+              <p className="text-sm text-charcoal-muted/60 mt-2">همه پرداخت‌ها بررسی شده‌اند</p>
             </div>
           )}
         </div>
       </section>
 
       <section className="card">
-        <h2 className="text-lg font-black">آرشیو کامل پرداخت‌ها و رزروها</h2>
-        <p className="mt-1 text-sm text-slate-500">در این بخش تمام سوابق قبلی (تایید/رد/درانتظار) همیشه قابل مشاهده است.</p>
+        <h2 className="text-lg font-bold text-ink">آرشیو کامل پرداخت‌ها و رزروها</h2>
+        <p className="mt-1 text-sm text-charcoal-muted">در این بخش تمام سوابق قبلی (تایید/رد/درانتظار) همیشه قابل مشاهده است.</p>
 
         <div className="mt-4 overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-200 text-right">
+              <tr className="border-b border-line text-right">
                 <th className="py-2">کارمند</th>
                 <th className="py-2">ملک</th>
                 <th className="py-2">بازه</th>
@@ -359,10 +359,10 @@ export default async function AdminDashboard() {
             </thead>
             <tbody>
               {allPayments.map((p) => (
-                <tr key={p.id} className="border-b border-slate-100">
+                <tr key={p.id} className="border-b border-line/60">
                   <td className="py-3">
                     <p>{p.booking.user.name}</p>
-                    <p className="text-xs text-slate-500" dir="ltr">
+                    <p className="text-xs text-charcoal-muted" dir="ltr">
                       {p.booking.user.phone || "—"}
                     </p>
                   </td>
@@ -376,7 +376,7 @@ export default async function AdminDashboard() {
                     <StatusBadge status={p.status} />
                   </td>
                   <td>
-                    <Link href={p.receiptPath} target="_blank" className="font-semibold text-blue-700">
+                    <Link href={p.receiptPath} target="_blank" className="font-semibold text-ink">
                       مشاهده فیش
                     </Link>
                   </td>

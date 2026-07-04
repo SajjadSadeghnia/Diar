@@ -38,8 +38,8 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
     <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-black">مدیریت رزروها</h1>
-          <p className="mt-1 text-sm text-slate-600">بررسی و رد رزروهای در انتظار پرداخت</p>
+          <h1 className="font-display text-xl font-semibold text-ink">مدیریت رزروها</h1>
+          <p className="mt-1 text-sm text-charcoal-muted">بررسی و رد رزروهای در انتظار پرداخت</p>
         </div>
         <Link href="/admin" className="btn-secondary text-sm">
           بازگشت به داشبورد
@@ -58,10 +58,10 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
       )}
 
       <section className="card">
-        <h2 className="mb-4 text-lg font-bold text-[#1a365d]">
+        <h2 className="mb-4 text-lg font-bold text-ink">
           رزروهای در انتظار پرداخت ({pendingBookings.length})
         </h2>
-        <p className="mb-4 text-sm text-slate-600">
+        <p className="mb-4 text-sm text-charcoal-muted">
           در این بخش می‌توانید رزروهایی را که هنوز رسید ندارند یا در انتظار بررسی هستند رد کنید.
         </p>
 
@@ -74,10 +74,10 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
                     <StatusBadge status={getBookingDisplayStatus(b)} size="md" />
                   </div>
                   <EmployeeInfo name={b.user.name} phone={b.user.phone} />
-                  <p className="text-sm text-slate-700">
+                  <p className="text-sm text-charcoal-muted">
                     <span className="font-medium">بازه:</span> {toJalaliDate(b.startDate)} تا {toJalaliDate(b.endDate)}
                   </p>
-                  <p className="text-sm text-slate-700">
+                  <p className="text-sm text-charcoal-muted">
                     <span className="font-medium">مبلغ:</span> {toToman(b.totalPrice)}
                   </p>
                   {shouldShowPaymentCountdown(b) && b.expiresAt && (
@@ -86,7 +86,7 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
                     </p>
                   )}
                   {b.payment && (
-                    <Link href={b.payment.receiptPath} target="_blank" className="text-sm text-blue-700">
+                    <Link href={b.payment.receiptPath} target="_blank" className="text-sm text-ink">
                       مشاهده رسید بارگذاری‌شده
                     </Link>
                   )}
@@ -102,16 +102,16 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
             </div>
           ))}
           {!pendingBookings.length && (
-            <p className="text-center text-sm text-slate-500 py-8">رزرو در انتظار پرداخت وجود ندارد.</p>
+            <p className="text-center text-sm text-charcoal-muted py-8">رزرو در انتظار پرداخت وجود ندارد.</p>
           )}
         </div>
       </section>
 
       <section className="card overflow-x-auto">
-        <h2 className="mb-4 text-lg font-bold text-[#1a365d]">همه رزروها</h2>
+        <h2 className="mb-4 text-lg font-bold text-ink">همه رزروها</h2>
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-200 text-right">
+            <tr className="border-b border-line text-right">
               <th className="py-2">کارمند</th>
               <th className="py-2">تماس</th>
               <th>ملک</th>
@@ -122,7 +122,7 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
           </thead>
           <tbody>
             {allBookings.map((b) => (
-              <tr key={b.id} className="border-b border-slate-100">
+              <tr key={b.id} className="border-b border-line/60">
                 <td className="py-3">{b.user.name}</td>
                 <td className="py-3" dir="ltr">
                   {b.user.phone || "—"}

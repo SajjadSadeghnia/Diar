@@ -39,15 +39,15 @@ export default async function AdminPaymentsPage() {
         {payments.map((p) => (
           <div className="card" key={p.id}>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h3 className="font-semibold">{p.booking.property.title}</h3>
+              <h3 className="font-semibold text-ink">{p.booking.property.title}</h3>
               <StatusBadge status={getBookingDisplayStatus(p.booking)} />
             </div>
             <EmployeeInfo name={p.booking.user.name} phone={p.booking.user.phone} className="mt-2" />
-            <p className="mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-sm text-charcoal-muted">
               بازه رزرو: {toJalaliDate(p.booking.startDate)} تا {toJalaliDate(p.booking.endDate)}
             </p>
             <p className="mt-2 text-sm">مبلغ: {toToman(p.amount)}</p>
-            <Image src={p.receiptPath} alt="رسید" width={360} height={180} className="mt-3 rounded-lg border" />
+            <Image src={p.receiptPath} alt="رسید" width={360} height={180} className="mt-3 rounded-lg border border-line" />
             <form action={reviewPayment} className="mt-3 flex gap-2">
               <input type="hidden" name="id" value={p.id} />
               <button className="btn-primary" name="paymentStatus" value="approved">تایید پرداخت</button>
