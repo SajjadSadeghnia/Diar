@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
-import { Vazirmatn } from "next/font/google";
+import { Noto_Naskh_Arabic, Vazirmatn } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 const vazir = Vazirmatn({ subsets: ["arabic"] });
+const notoNaskhArabic = Noto_Naskh_Arabic({
+  subsets: ["arabic"],
+  weight: ["500", "600", "700"],
+  variable: "--font-display",
+});
 
 export const metadata: Metadata = {
   title: "دیار | سامانه رزرو ویلای سازمانی",
@@ -13,7 +18,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fa" dir="rtl">
+    <html lang="fa" dir="rtl" className={notoNaskhArabic.variable}>
       <body className={`${vazir.className} min-h-screen`}>
         <SiteHeader />
         <main className="pb-20 md:pb-0">{children}</main>

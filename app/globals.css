@@ -1,40 +1,60 @@
 @import "tailwindcss";
 
-:root {
-  --color-primary: #1a365d;
-  --color-secondary: #2d4a3e;
-  --color-accent: #c9a227;
-  --color-light: #f8f6f3;
-  --color-dark: #1a1a1a;
+/*
+  Design system: "Shomal Dusk"
+  Forest teal is the dominant structural color; clay is a rare, deliberate
+  accent (never a background wash); canvas is a sand-green-tinted neutral,
+  not a generic warm cream. See docs/ai/ for the source design conversation.
+*/
+@theme {
+  --color-ink: #1f3d34;
+  --color-ink-hover: #16302a;
+  --color-clay: #a8501f;
+  --color-clay-soft: #c1652f;
+  --color-clay-hover: #8f4219;
+  --color-canvas: #f2eee1;
+  --color-canvas-raised: #fbf9f3;
+  --color-charcoal: #2a2420;
+  --color-charcoal-muted: #5c5346;
+  --color-line: #ded3c4;
 }
 
 body {
-  background-color: var(--color-light);
-  color: var(--color-dark);
+  background-color: var(--color-canvas);
+  color: var(--color-charcoal);
+}
+
+.font-display {
+  font-family: var(--font-display);
 }
 
 .input {
-  @apply w-full rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition placeholder:text-slate-400 focus:border-[#c9a227] focus:ring-2 focus:ring-[#c9a227]/30;
+  @apply w-full rounded-lg border border-line bg-canvas-raised px-3 py-2 text-sm text-charcoal outline-none transition placeholder:text-charcoal-muted/60 focus:border-clay-soft focus:ring-2 focus:ring-clay-soft/25;
 }
 
 .btn-primary {
-  @apply min-h-11 rounded-xl bg-[#1a365d] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-[#2d4a3e] disabled:cursor-not-allowed disabled:opacity-60;
+  @apply min-h-11 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-white transition hover:bg-ink-hover disabled:cursor-not-allowed disabled:opacity-60;
 }
 
 .btn-secondary {
-  @apply rounded-xl bg-[#c9a227] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#b8922a] disabled:cursor-not-allowed disabled:opacity-60;
+  @apply min-h-11 rounded-lg border border-ink/25 bg-transparent px-4 py-2 text-sm font-medium text-ink transition hover:bg-ink/5 disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.btn-accent {
+  @apply min-h-11 rounded-lg bg-clay px-4 py-2 text-sm font-medium text-white transition hover:bg-clay-hover disabled:cursor-not-allowed disabled:opacity-60;
 }
 
 .btn-danger {
-  @apply rounded-xl bg-rose-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-60;
+  @apply min-h-11 rounded-lg bg-rose-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-60;
 }
 
 .card {
-  @apply rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm;
+  @apply rounded-2xl border border-line/80 bg-canvas-raised p-5 shadow-sm;
 }
 
 .section-title {
-  @apply text-2xl font-extrabold text-[#1a365d] md:text-3xl;
+  font-family: var(--font-display);
+  @apply text-2xl font-bold text-ink md:text-3xl;
 }
 
 .spinner {
@@ -42,9 +62,9 @@ body {
 }
 
 .glass {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(251, 249, 243, 0.85);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(31, 61, 52, 0.08);
 }
 
 .card-hover {
@@ -56,11 +76,18 @@ body {
 }
 
 .input-focus {
-  @apply transition-all duration-200 focus:border-[#c9a227] focus:ring-2 focus:ring-[#c9a227]/30 focus:shadow-lg;
+  @apply transition-all duration-200 focus:border-clay-soft focus:ring-2 focus:ring-clay-soft/25 focus:shadow-lg;
 }
 
 .loading-skeleton {
-  @apply animate-pulse bg-slate-200 rounded;
+  @apply animate-pulse rounded bg-line/60;
+}
+
+/* Photo containers get generous rounding (courtyard arch/window feel);
+   buttons/inputs stay tight (rounded-lg); badges stay pills. A deliberate
+   3-tier radius scale instead of one rounded-xl used everywhere. */
+.radius-photo {
+  border-radius: 1.75rem;
 }
 
 @keyframes fade-in {
@@ -69,14 +96,19 @@ body {
 }
 
 @keyframes slide-up {
-  from { 
+  from {
     opacity: 0;
     transform: translateY(20px);
   }
-  to { 
+  to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes ken-burns {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
 }
 
 .animate-fade-in {
@@ -89,6 +121,10 @@ body {
 
 .animate-fade-in-fast {
   animation: fade-in 0.3s ease-out;
+}
+
+.animate-ken-burns {
+  animation: ken-burns 14s ease-out forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
