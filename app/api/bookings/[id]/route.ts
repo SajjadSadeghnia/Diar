@@ -38,3 +38,27 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 
   return NextResponse.json(booking);
 }
+
+/** Admin-only: permanently delete a booking (and its linked payment via cascade) after it has been approved or rejected. Receipt files on disk are never touched. */
+export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const user = await getCurrentUser();
+  if (!user || user.role !== "admin") {
+    return NextResponse.json({ error: "دسترسی غیرمجاز" }, { status: 403 });
+  }
+
+  const { id } = await params;
+
+  const booking = await prisma.booking.findUnique({ where: { id } });
+
+  if (!booking) {
+    return NextResponse.json({ error: "رزرو یافت نشد" }, { status: 404 });
+  }
+
+  if (booking.status !== "approved" && booking.status !== "rejected") {
+    return NextResponse.json({ error: "فقط رزروهای تایید یا رد شده قابل حذف هستند" }, { status: 400 });
+  }
+
+  await prisma.booking.delete({ where: { id } });
+
+  return NextResponse.json({ ok: true });
+}

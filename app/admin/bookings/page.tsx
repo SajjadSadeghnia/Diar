@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { StatusBadge } from "@/components/status-badge";
 import { EmployeeInfo } from "@/components/employee-info";
+import { DeleteBookingButton } from "@/components/delete-booking-button";
 import { getCurrentUser } from "@/lib/auth";
 import { rejectPendingBookingForm } from "@/lib/admin-booking-actions";
 import { expireStaleBookings } from "@/lib/booking-lifecycle";
@@ -118,6 +119,7 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
               <th>بازه</th>
               <th>وضعیت</th>
               <th>مهلت پرداخت</th>
+              <th>عملیات</th>
             </tr>
           </thead>
           <tbody>
@@ -138,6 +140,9 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
                   {shouldShowPaymentCountdown(b) && b.expiresAt
                     ? formatRemainingMs(b.expiresAt, now)
                     : "—"}
+                </td>
+                <td>
+                  <DeleteBookingButton bookingId={b.id} status={b.status} />
                 </td>
               </tr>
             ))}
