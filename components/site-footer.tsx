@@ -36,7 +36,9 @@ export function SiteFooter() {
           <h3 className="mb-3 font-semibold text-white/90">تماس با ما</h3>
           <div className="space-y-2 text-sm text-white/70">
             <p>مدیر سامانه دیار</p>
-            <p>تلفن: 021-12345678</p>
+            <p>
+              تلفن: <span dir="ltr">021-12345678</span>
+            </p>
           </div>
         </div>
       </div>
