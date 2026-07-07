@@ -63,8 +63,13 @@ body {
 
 .glass {
   background: rgba(251, 249, 243, 0.85);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(31, 61, 52, 0.08);
+  /* iOS Safari has a known bug where a `position: sticky` element combined
+     with `backdrop-filter` fails to hit-test touches until a compositing
+     layer is forced. transform: translateZ(0) forces that layer. */
+  transform: translateZ(0);
 }
 
 .card-hover {
