@@ -47,7 +47,7 @@ export default function LoginPage() {
               <Building2 className="h-8 w-8 text-white" />
             </div>
             <h1 className="font-display mb-2 text-3xl font-semibold text-ink">ورود به حساب کاربری</h1>
-            <p className="text-charcoal-muted">ورود کارمندان و مدیر سامانه برای رزرو ویلای سازمانی</p>
+            <p className="hidden text-charcoal-muted md:block">ورود کارمندان و مدیر سامانه برای رزرو ویلای سازمانی</p>
           </div>
 
           {error && <div className="mb-6 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700">{error}</div>}
