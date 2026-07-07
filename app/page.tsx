@@ -56,7 +56,7 @@ export default async function HomePage() {
               {property && (
                 <Link
                   href={user ? `/properties/${property.id}` : "/login"}
-                  className="btn-secondary inline-flex items-center gap-2 duration-200 hover:-translate-y-0.5 hover:brightness-105"
+                  className="btn-secondary inline-flex items-center gap-2 !border-white/50 !text-white duration-200 hover:-translate-y-0.5 hover:!border-white hover:!bg-white/10"
                 >
                   ورود به فرصت‌های دیار <ArrowLeft className="h-4 w-4" />
                 </Link>
