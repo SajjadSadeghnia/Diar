@@ -1,7 +1,12 @@
 import Link from "next/link";
 import { Building2 } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const setting = await prisma.systemSetting.findUnique({ where: { id: 1 } });
+  const contactPhone = setting?.contactPhone || "021-12345678";
+  const contactInfo = setting?.contactInfo || "مدیر سامانه دیار";
+
   return (
     <footer className="mt-12 bg-ink text-white">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 py-10 md:grid-cols-3">
@@ -35,9 +40,9 @@ export function SiteFooter() {
         <div>
           <h3 className="mb-3 font-semibold text-white/90">تماس با ما</h3>
           <div className="space-y-2 text-sm text-white/70">
-            <p>مدیر سامانه دیار</p>
+            <p>{contactInfo}</p>
             <p>
-              تلفن: <span dir="ltr">021-12345678</span>
+              تلفن: <span dir="ltr">{contactPhone}</span>
             </p>
           </div>
         </div>

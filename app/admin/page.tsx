@@ -17,6 +17,7 @@ import { revalidatePath } from "next/cache";
 import { StatusBadge } from "@/components/status-badge";
 import { EmployeeInfo } from "@/components/employee-info";
 import { AdminPaymentSettingsModal } from "@/components/admin-payment-settings-modal";
+import { AdminContactSettingsModal } from "@/components/admin-contact-settings-modal";
 import { rejectPendingBookingForm } from "@/lib/admin-booking-actions";
 
 async function reviewPayment(formData: FormData) {
@@ -178,6 +179,26 @@ export default async function AdminDashboard() {
           <AdminPaymentSettingsModal
             initialCardNumber={setting?.cardNumber || ""}
             initialInstructions={setting?.instructions || ""}
+          />
+        </div>
+      </section>
+
+      <section className="card">
+        <div className="mb-6">
+          <h2 className="text-xl font-bold text-ink flex items-center gap-2">
+            <Settings className="h-5 w-5 text-ink" />
+            اطلاعات تماس
+          </h2>
+          <p className="mt-2 text-sm text-charcoal-muted">شماره تماس و عنوان بخش «تماس با ما» در فوتر سایت</p>
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-sm text-charcoal-muted/70">شماره تماس فعلی:</p>
+            <p className="font-medium text-ink" dir="ltr">{setting?.contactPhone || "تنظیم نشده"}</p>
+          </div>
+          <AdminContactSettingsModal
+            initialContactPhone={setting?.contactPhone || ""}
+            initialContactInfo={setting?.contactInfo || ""}
           />
         </div>
       </section>

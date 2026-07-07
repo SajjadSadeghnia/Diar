@@ -65,11 +65,13 @@ async function ensureSystemSetting() {
   const instructions =
     process.env.PAYMENT_INSTRUCTIONS?.trim() ||
     "پس از واریز، تصویر رسید را بارگذاری کنید تا توسط ادمین بررسی شود.";
+  const contactPhone = process.env.CONTACT_PHONE?.trim() || "021-12345678";
+  const contactInfo = process.env.CONTACT_INFO?.trim() || "مدیر سامانه دیار";
 
   const setting = await prisma.systemSetting.upsert({
     where: { id: 1 },
     update: { cardNumber, instructions },
-    create: { id: 1, cardNumber, instructions },
+    create: { id: 1, cardNumber, instructions, contactPhone, contactInfo },
   });
   console.log(`UPSERT SystemSetting id=1 (card …${setting.cardNumber.slice(-4)})`);
 }

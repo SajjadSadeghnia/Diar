@@ -86,9 +86,11 @@ model Payment {
 }
 
 model SystemSetting {
-  id          Int      @id
-  cardNumber  String
+  id           Int      @id
+  cardNumber   String
   instructions String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  contactPhone String   @default("021-12345678")
+  contactInfo  String   @default("مدیر سامانه دیار")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
