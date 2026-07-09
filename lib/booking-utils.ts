@@ -8,7 +8,7 @@ export const MAX_STAY_DAYS = 3;
 export const MIN_ADVANCE_DAYS = 1;
 export const COOLDOWN_DAYS = 10;
 
-export type DateBlockType = "reserved" | "temporary";
+export type DateBlockType = "reserved" | "temporary" | "closed";
 export type PropertyAvailabilityState = "available" | "temporarily_reserved" | "reserved";
 
 export type BookingRange = {
@@ -34,6 +34,32 @@ export function getCheckoutTime(endDate: Date): Date {
 
 export function getPaymentExpiresAt(from: Date = new Date()): Date {
   return new Date(from.getTime() + PAYMENT_HOLD_MS);
+}
+
+/** Canonical instant for a calendar day's night — used as the DateOverride key. */
+export function getNightKey(date: Date): Date {
+  return getCheckInTime(date);
+}
+
+/** Start instants of every night in [startDate, endDate) — one per stay night. */
+export function enumerateNights(startDate: Date, endDate: Date): Date[] {
+  const nights = calcStayDays(startDate, endDate);
+  const first = getCheckInTime(startDate);
+  const result: Date[] = [];
+  for (let i = 0; i < nights; i++) {
+    const n = new Date(first);
+    n.setDate(n.getDate() + i);
+    result.push(n);
+  }
+  return result;
+}
+
+/** A closed calendar day blocks the night [12:00 that day, 12:00 next day). */
+export function closedDateToRange(date: Date): { startDate: Date; endDate: Date; type: "closed" } {
+  const startDate = getCheckInTime(date);
+  const endDate = new Date(startDate);
+  endDate.setDate(endDate.getDate() + 1);
+  return { startDate, endDate, type: "closed" };
 }
 
 export function calcStayDays(startDate: Date, endDate: Date): number {
@@ -255,6 +281,7 @@ export function rangeOverlapsBlocked(
 export function getOverlapMessage(conflictType?: DateBlockType): string {
   if (conflictType === "reserved") return "این تاریخ قبلاً رزرو شده است";
   if (conflictType === "temporary") return "این بازه زمانی در حال رزرو است";
+  if (conflictType === "closed") return "این تاریخ توسط مدیریت بسته شده است";
   return "این بازه زمانی قابل رزرو نیست";
 }
 
@@ -266,7 +293,7 @@ export function getSelectionAvailabilityState(
 ): PropertyAvailabilityState {
   const { overlaps, conflictType } = rangeOverlapsBlocked(start, end, blockedRanges);
   if (!overlaps) return "available";
-  return conflictType === "reserved" ? "reserved" : "temporarily_reserved";
+  return conflictType === "temporary" ? "temporarily_reserved" : "reserved";
 }
 
 export type SelectionEvaluation = {
@@ -292,7 +319,7 @@ export function evaluateDateSelection(
 
   const overlap = rangeOverlapsBlocked(start, end, blockedRanges);
   if (overlap.overlaps) {
-    const state = overlap.conflictType === "reserved" ? "reserved" : "temporarily_reserved";
+    const state = overlap.conflictType === "temporary" ? "temporarily_reserved" : "reserved";
     return { state, canBook: false, message: getOverlapMessage(overlap.conflictType) };
   }
 

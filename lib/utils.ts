@@ -10,11 +10,6 @@ export function toJalaliDate(value: Date | string) {
   }).format(new Date(value));
 }
 
-export function calcDays(start: Date, end: Date) {
-  const oneDay = 1000 * 60 * 60 * 24;
-  return Math.max(1, Math.ceil((end.getTime() - start.getTime()) / oneDay));
-}
-
 import { type ClassValue, clsx } from "clsx";
 
 export function cn(...inputs: ClassValue[]) {

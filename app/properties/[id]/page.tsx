@@ -23,7 +23,7 @@ type Property = PropertyPresentation;
 
 type AvailabilityPayload = {
   availability: PropertyAvailabilityState;
-  blockedRanges: Array<{ startDate: string; endDate: string; type: "reserved" | "temporary" }>;
+  blockedRanges: Array<{ startDate: string; endDate: string; type: "reserved" | "temporary" | "closed" }>;
   minCheckInDate: string;
   maxStayDays: number;
   paymentHoldHours: number;

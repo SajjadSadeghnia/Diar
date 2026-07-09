@@ -1,6 +1,7 @@
 import { getCurrentUser } from "@/lib/auth";
 import { fetchBlockingBookings } from "@/lib/booking-lifecycle";
 import {
+  closedDateToRange,
   getBlockedRanges,
   getEarliestCheckInDate,
   getPropertyAvailabilityState,
@@ -8,6 +9,7 @@ import {
   MAX_STAY_DAYS,
   PAYMENT_HOLD_HOURS,
 } from "@/lib/booking-utils";
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -18,10 +20,19 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   const now = new Date();
 
   try {
-    const bookings = await fetchBlockingBookings(id);
+    const [bookings, closedOverrides] = await Promise.all([
+      fetchBlockingBookings(id),
+      prisma.dateOverride.findMany({
+        where: { propertyId: id, closed: true },
+        select: { date: true },
+      }),
+    ]);
     const ranges = bookings.map(toBookingRange);
 
-    const blockedRanges = getBlockedRanges(ranges, now);
+    const blockedRanges = [
+      ...getBlockedRanges(ranges, now),
+      ...closedOverrides.map((o) => closedDateToRange(o.date)),
+    ];
     const availability = getPropertyAvailabilityState(ranges, now);
 
     return NextResponse.json({
