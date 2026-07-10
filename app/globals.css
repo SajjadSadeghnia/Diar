@@ -139,3 +139,24 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* react-multi-date-picker — full-width inputs, no horizontal overflow on mobile (RTL) */
+.property-date-picker {
+  width: 100%;
+  min-width: 0;
+}
+
+.property-date-picker .rmdp-container,
+.property-date-picker .rmdp-input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.rmdp-wrapper {
+  max-width: calc(100vw - 2rem);
+}
+
+.rmdp-calendar {
+  max-width: min(100vw - 2rem, 20rem);
+}

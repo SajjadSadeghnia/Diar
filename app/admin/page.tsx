@@ -163,6 +163,23 @@ export default async function AdminDashboard() {
         </div>
       </section>
 
+      <section>
+        <Link
+          href="/admin/properties"
+          className="card group flex items-start gap-4 transition-all duration-200 hover:border-ink/20 hover:shadow-md"
+        >
+          <div className="shrink-0 rounded-lg bg-ink/10 p-3">
+            <Building2 className="h-6 w-6 text-ink" />
+          </div>
+          <div className="min-w-0">
+            <h2 className="font-semibold text-ink">مدیریت ویلا و قیمت‌گذاری تاریخ‌ها</h2>
+            <p className="mt-1 text-sm leading-relaxed text-charcoal-muted">
+              ویرایش اطلاعات ویلا، قیمت روزانه و تعیین قیمت یا بستن روزهای خاص
+            </p>
+          </div>
+        </Link>
+      </section>
+
       <section className="card">
         <div className="mb-6">
           <h2 className="text-xl font-bold text-ink flex items-center gap-2">

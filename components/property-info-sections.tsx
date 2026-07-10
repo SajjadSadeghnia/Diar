@@ -57,8 +57,8 @@ export function PropertyInfoSections({
   details,
 }: PropertyInfoSectionsProps) {
   return (
-    <div className="space-y-6">
-      <section className="card">
+    <div className="min-w-0 w-full space-y-6">
+      <section className="card min-w-0">
         <h2 className="mb-4 text-lg font-bold text-ink">اطلاعات کلی واحد</h2>
         <div className="grid gap-3 sm:grid-cols-2">
           <DetailRow icon={Users} label="ظرفیت (تعداد نفرات)">
@@ -83,7 +83,7 @@ export function PropertyInfoSections({
                 href={mapUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 inline-flex items-center gap-2 rounded-lg bg-ink px-4 py-2 text-sm font-medium text-white transition hover:bg-ink-hover"
+                className="mt-3 inline-flex max-w-full items-center gap-2 rounded-lg bg-ink px-4 py-2 text-sm font-medium text-white transition hover:bg-ink-hover"
               >
                 <ExternalLink className="h-4 w-4" />
                 مشاهده موقعیت روی نقشه

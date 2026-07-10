@@ -21,7 +21,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="fa" dir="rtl" className={notoNaskhArabic.variable}>
       <body className={`${vazir.className} min-h-screen`}>
         <SiteHeader />
-        <main className="pb-20 md:pb-0">{children}</main>
+        <main className="pb-24 md:pb-0">{children}</main>
         <SiteFooter />
       </body>
     </html>

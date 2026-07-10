@@ -178,14 +178,14 @@ export default function PropertyDetailPage() {
   const details = property.details;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6">
+    <div className="mx-auto w-full min-w-0 max-w-6xl overflow-x-hidden px-4 py-6">
       <Link href="/" className="btn-secondary mb-4 inline-flex">
         بازگشت به خانه
       </Link>
 
-      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="font-display text-2xl font-semibold text-ink md:text-3xl">{property.title}</h1>
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0 flex-1">
+          <h1 className="font-display break-words text-2xl font-semibold text-ink md:text-3xl">{property.title}</h1>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-charcoal-muted">{property.description}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <span className="rounded-full bg-ink/10 px-3 py-1 text-xs font-medium text-ink">
@@ -194,16 +194,20 @@ export default function PropertyDetailPage() {
             <span className="rounded-full bg-ink/10 px-3 py-1 text-xs font-medium text-ink">
               {property.bedrooms} خواب
             </span>
-            <span className="rounded-full bg-clay/10 px-3 py-1 text-sm font-bold text-clay">
+            <span className="max-w-full break-words rounded-full bg-clay/10 px-3 py-1 text-xs font-bold text-clay sm:text-sm">
               {toToman(property.dailyPrice)} / هر شب
             </span>
           </div>
         </div>
-        {displayStatus && <StatusBadge status={displayStatus} size="md" />}
+        {displayStatus && (
+          <div className="shrink-0 self-start">
+            <StatusBadge status={displayStatus} size="md" />
+          </div>
+        )}
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
-        <div className="order-2 space-y-8 lg:order-1 lg:col-span-2">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-3 lg:gap-8">
+        <div className="order-2 min-w-0 space-y-6 lg:order-1 lg:col-span-2 lg:space-y-8">
           <PropertyGallery images={property.images} title={property.title} />
           <PropertyInfoSections
             capacity={property.capacity}
@@ -217,7 +221,7 @@ export default function PropertyDetailPage() {
           />
         </div>
 
-        <div className="order-1 lg:order-2 lg:col-span-1">
+        <div className="order-1 min-w-0 lg:order-2 lg:col-span-1">
           <div className="card space-y-4 lg:sticky lg:top-4">
             <h2 className="font-display text-lg font-semibold text-ink">رزرو اقامت</h2>
 
@@ -242,30 +246,38 @@ export default function PropertyDetailPage() {
               </div>
             )}
 
-            <div className={`grid gap-3 ${pickerDisabled ? "pointer-events-none opacity-50" : ""}`}>
-              <div>
+            <div className={`grid min-w-0 gap-3 ${pickerDisabled ? "pointer-events-none opacity-50" : ""}`}>
+              <div className="property-date-picker min-w-0 w-full">
                 <label className="mb-1 block text-xs text-charcoal-muted/70">تاریخ ورود</label>
                 <DatePicker
                   calendar={persian}
                   locale={persian_fa}
                   value={startDate || ""}
                   onChange={pickStart}
-                  inputClass="input"
+                  containerClassName="w-full"
+                  inputClass="input w-full"
+                  className="w-full"
                   format="YYYY/MM/DD"
                   minDate={minCheckIn}
+                  calendarPosition="bottom-right"
+                  portal
                   mapDays={({ date }) => mapDayProps(date)}
                 />
               </div>
-              <div>
+              <div className="property-date-picker min-w-0 w-full">
                 <label className="mb-1 block text-xs text-charcoal-muted/70">تاریخ خروج</label>
                 <DatePicker
                   calendar={persian}
                   locale={persian_fa}
                   value={endDate || ""}
                   onChange={pickEnd}
-                  inputClass="input"
+                  containerClassName="w-full"
+                  inputClass="input w-full"
+                  className="w-full"
                   format="YYYY/MM/DD"
                   minDate={startDate || minCheckIn}
+                  calendarPosition="bottom-right"
+                  portal
                   mapDays={({ date }) => mapDayProps(date)}
                 />
               </div>

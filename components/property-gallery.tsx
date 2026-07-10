@@ -39,9 +39,9 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
 
   return (
     <>
-      <div className="space-y-3">
+      <div className="min-w-0 w-full space-y-3">
         <div
-          className="radius-photo group relative aspect-[16/10] overflow-hidden border border-line bg-canvas shadow-sm touch-pan-y"
+          className="radius-photo group relative aspect-[16/10] w-full overflow-hidden border border-line bg-canvas shadow-sm touch-pan-y"
           onTouchStart={(e) => {
             touchStartX.current = e.touches[0]?.clientX ?? null;
           }}
