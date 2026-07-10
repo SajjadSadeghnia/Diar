@@ -3,6 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import DatePicker from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import type { DateObject } from "react-multi-date-picker";
+import { toJalaliDate, toToman } from "@/lib/utils";
 
 type Property = {
   id: string;
@@ -13,6 +18,13 @@ type Property = {
   dailyPrice: number;
   status: "available" | "unavailable";
   images: string[];
+};
+
+type DateOverride = {
+  id: string;
+  date: string;
+  price: number | null;
+  closed: boolean;
 };
 
 export default function AdminPropertiesPage() {
@@ -28,6 +40,19 @@ export default function AdminPropertiesPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const [overrides, setOverrides] = useState<DateOverride[]>([]);
+  const [overrideDate, setOverrideDate] = useState<Date | null>(null);
+  const [overridePrice, setOverridePrice] = useState("");
+  const [overrideClosed, setOverrideClosed] = useState(false);
+  const [overrideSaving, setOverrideSaving] = useState(false);
+  const [overrideError, setOverrideError] = useState("");
+  const [overrideSuccess, setOverrideSuccess] = useState("");
+
+  const loadOverrides = useCallback(async (propertyId: string) => {
+    const res = await fetch(`/api/properties/${propertyId}/date-overrides`, { credentials: "include" });
+    if (res.ok) setOverrides(await res.json());
+  }, []);
+
   const load = useCallback(async () => {
     const res = await fetch("/api/properties", { credentials: "include" });
     const data = await res.json();
@@ -40,12 +65,66 @@ export default function AdminPropertiesPage() {
       setContactPhone(single.contactPhone);
       setDailyPrice(String(single.dailyPrice));
       setStatus(single.status);
+      await loadOverrides(single.id);
     }
-  }, []);
+  }, [loadOverrides]);
 
   useEffect(() => {
     load();
   }, [load]);
+
+  async function saveOverride(e: React.FormEvent) {
+    e.preventDefault();
+    if (!property || !overrideDate) {
+      setOverrideError("ابتدا تاریخ را انتخاب کنید");
+      return;
+    }
+    if (!overrideClosed && !overridePrice) {
+      setOverrideError("قیمت وارد کنید یا گزینه بستن تاریخ را فعال کنید");
+      return;
+    }
+
+    setOverrideSaving(true);
+    setOverrideError("");
+    setOverrideSuccess("");
+
+    const res = await fetch(`/api/properties/${property.id}/date-overrides`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        date: overrideDate.toISOString(),
+        price: overridePrice ? Number(overridePrice) : null,
+        closed: overrideClosed,
+      }),
+    });
+    const data = await res.json();
+    setOverrideSaving(false);
+
+    if (!res.ok) {
+      setOverrideError(data.error || "خطا در ذخیره");
+      return;
+    }
+
+    setOverrideSuccess("ذخیره شد");
+    setOverrideDate(null);
+    setOverridePrice("");
+    setOverrideClosed(false);
+    await loadOverrides(property.id);
+  }
+
+  async function deleteOverride(date: string) {
+    if (!property) return;
+    setOverrideError("");
+    const res = await fetch(`/api/properties/${property.id}/date-overrides`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ date }),
+    });
+    if (res.ok) await loadOverrides(property.id);
+    else setOverrideError("خطا در حذف");
+  }
 
   async function saveProperty(e: React.FormEvent) {
     e.preventDefault();
@@ -150,6 +229,92 @@ export default function AdminPropertiesPage() {
           </>
         )}
       </div>
+
+      {property && (
+        <div className="card">
+          <h2 className="font-display mb-2 text-lg font-semibold text-ink">قیمت و وضعیت روزهای خاص</h2>
+          <p className="mb-4 text-sm text-charcoal-muted">
+            برای هر تاریخ می‌توانید قیمت اختصاصی تعیین کنید یا آن روز را برای رزرو ببندید.
+          </p>
+
+          <form onSubmit={saveOverride} className="grid gap-3 md:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-xs text-charcoal-muted/70">تاریخ</label>
+              <DatePicker
+                calendar={persian}
+                locale={persian_fa}
+                value={overrideDate || ""}
+                onChange={(v: DateObject | null) => setOverrideDate(v?.toDate?.() ?? null)}
+                inputClass="input"
+                format="YYYY/MM/DD"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-charcoal-muted/70">قیمت این تاریخ (تومان)</label>
+              <input
+                className="input"
+                type="number"
+                min={1}
+                value={overridePrice}
+                onChange={(e) => setOverridePrice(e.target.value)}
+                placeholder={`پیش‌فرض: ${dailyPrice || "قیمت روزانه"}`}
+              />
+            </div>
+            <label className="flex items-center gap-2 text-sm md:col-span-2">
+              <input
+                type="checkbox"
+                checked={overrideClosed}
+                onChange={(e) => setOverrideClosed(e.target.checked)}
+              />
+              بستن این تاریخ برای رزرو
+            </label>
+            {overrideError && <p className="text-sm text-rose-600 md:col-span-2">{overrideError}</p>}
+            {overrideSuccess && <p className="text-sm text-emerald-600 md:col-span-2">{overrideSuccess}</p>}
+            <button disabled={overrideSaving} className="btn-primary md:col-span-2">
+              {overrideSaving ? "در حال ذخیره..." : "ذخیره تاریخ"}
+            </button>
+          </form>
+
+          {overrides.length > 0 && (
+            <div className="mt-5 overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-line text-right">
+                    <th className="py-2">تاریخ</th>
+                    <th className="py-2">قیمت</th>
+                    <th className="py-2">وضعیت</th>
+                    <th className="py-2"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {overrides.map((o) => (
+                    <tr key={o.id} className="border-b border-line/60">
+                      <td className="py-2">{toJalaliDate(o.date)}</td>
+                      <td className="py-2">{o.price != null ? toToman(o.price) : "—"}</td>
+                      <td className="py-2">
+                        {o.closed ? (
+                          <span className="rounded-full bg-rose-100 px-2 py-0.5 text-xs text-rose-700">بسته</span>
+                        ) : (
+                          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700">باز</span>
+                        )}
+                      </td>
+                      <td className="py-2 text-left">
+                        <button
+                          type="button"
+                          className="text-xs text-rose-600 underline"
+                          onClick={() => deleteOverride(o.date)}
+                        >
+                          حذف
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
     </main>
   );
 }

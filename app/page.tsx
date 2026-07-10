@@ -8,7 +8,6 @@ import { fetchBlockingBookings } from "@/lib/booking-lifecycle";
 import { getPropertyAvailabilityState, toBookingRange } from "@/lib/booking-utils";
 import { getHomepageAmenityPreview, parsePropertyDetails } from "@/lib/property-details";
 import { getSingleProperty } from "@/lib/property";
-import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 export default async function HomePage() {

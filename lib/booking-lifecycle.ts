@@ -1,13 +1,13 @@
 import type { PrismaClient } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import {
+  enumerateNights,
   getPaymentExpiresAt,
   hasBookingOverlap,
   validateBookingDates,
   validateCooldown,
   type BookingRange,
 } from "@/lib/booking-utils";
-import { calcDays } from "@/lib/utils";
 
 type Tx = Omit<
   PrismaClient,
@@ -62,6 +62,11 @@ export async function createBookingHold(input: CreateBookingInput) {
   }
 
   return prisma.$transaction(async (tx) => {
+    // Serialize concurrent booking creation for this property. Without this,
+    // two simultaneous requests can both pass the overlap check below and
+    // create overlapping holds (read-then-write race under READ COMMITTED).
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${propertyId}))`;
+
     await expireStaleBookings(tx);
 
     const property = await tx.property.findUnique({ where: { id: propertyId } });
@@ -106,8 +111,21 @@ export async function createBookingHold(input: CreateBookingInput) {
       throw new Error(cooldownValidation.error);
     }
 
-    const days = calcDays(startDate, endDate);
-    const totalPrice = days * property.dailyPrice;
+    // Per-night pricing and admin-closed dates
+    const nightStarts = enumerateNights(startDate, endDate);
+    const overrides = await tx.dateOverride.findMany({
+      where: { propertyId, date: { in: nightStarts } },
+    });
+    const overrideByNight = new Map(overrides.map((o) => [o.date.getTime(), o]));
+
+    if (nightStarts.some((n) => overrideByNight.get(n.getTime())?.closed)) {
+      throw new Error("بخشی از بازه انتخابی توسط مدیریت بسته شده است");
+    }
+
+    const totalPrice = nightStarts.reduce(
+      (sum, n) => sum + (overrideByNight.get(n.getTime())?.price ?? property.dailyPrice),
+      0
+    );
     const expiresAt = getPaymentExpiresAt(now);
 
     const booking = await tx.booking.create({
