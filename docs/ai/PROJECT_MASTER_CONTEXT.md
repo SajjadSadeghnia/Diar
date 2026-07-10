@@ -215,9 +215,10 @@ File system: /var/www/diar/uploads/ (symlinked to public/uploads/)
 ### Enums
 
 - `Role`: `admin` | `employee`
-- `BookingStatus`: `pending_payment` | `approved` | `rejected` | `expired`
+- `BookingStatus`: `pending_payment` | `approved` | `rejected` | `expired` | `cancelled` | `cancellation_requested`
 - `PaymentStatus`: `pending` | `approved` | `rejected`
 - `PropertyStatus`: `available` | `unavailable`
+- `NotificationType`, `AuditAction`, `AuditEntityType` — Phase 2 foundations (see `prisma/schema.prisma`)
 
 ---
 
@@ -228,6 +229,31 @@ File system: /var/www/diar/uploads/ (symlinked to public/uploads/)
 - **Cookie security:** `secure: true` + `sameSite: "none"` on HTTPS; `secure: false` + `sameSite: "lax"` on HTTP
 - **No email login.** This constraint is permanent and business-critical.
 - **No self-registration.** Accounts created by admin via import script or bootstrap.
+- **Inactive accounts (Phase 2):** `User.active` defaults to `true`. Login rejects inactive users with: «حساب کاربری شما غیرفعال شده است».
+
+### Recommended: session validation for deactivated users (not yet implemented)
+
+Today, deactivation is enforced only at **login**. A user who is already logged in keeps a valid JWT until expiry (up to 7 days) even if an admin deactivates the account mid-session.
+
+**Recommended architecture (Release 2+):**
+
+1. **Shared helper** — `lib/auth-session.ts` with `requireActiveUser()`:
+   - Reads JWT from cookie (existing `getCurrentUser()`).
+   - Loads `User` from DB: `select: { id, role, name, active }`.
+   - If `!active` → clear `token` cookie, return 403 JSON `{ error: "حساب کاربری شما غیرفعال شده است" }`.
+   - Cache is **not** recommended (stale `active` defeats the purpose).
+
+2. **API routes** — Call `requireActiveUser()` at the start of every protected handler (bookings, payments, notifications, settings). Admin routes use the same check (admins also have `active`).
+
+3. **Page routes (RSC)** — In layouts or page loaders that already call `getCurrentUser()`, add a DB `active` check and `redirect("/login")` if inactive. Prefer `app/(employee)/layout.tsx` and `app/admin/layout.tsx` over duplicating per page.
+
+4. **Middleware (`proxy.ts` / future `middleware.ts`)** — Do **not** query PostgreSQL on every request from Edge middleware (latency, connection limits, Prisma in Edge is awkward). Middleware should continue JWT presence/role checks only. **Authoritative `active` enforcement belongs in API + RSC**, not middleware.
+
+5. **Optional hardening** — Shorten JWT TTL for employees (e.g. 24h) or add `userUpdatedAt` / `sessionVersion` to JWT payload and reject tokens issued before last deactivation. Only needed if 7-day stale sessions are unacceptable; DB `active` check per request is sufficient for ~92 users.
+
+6. **Admin deactivation flow** — When implementing employee management, deactivation should be audit-logged; no need to invalidate JWT server-side if step 2 is in place (next API call fails immediately).
+
+**Order of implementation:** login check (done) → `requireActiveUser()` on APIs → layout checks on pages → optional JWT versioning later.
 
 ---
 

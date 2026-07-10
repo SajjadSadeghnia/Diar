@@ -8,6 +8,8 @@ const statusMap: Record<string, { label: string; icon?: React.ComponentType<{ cl
   approved: { label: "تایید شده", icon: CheckCircle, color: "emerald" },
   rejected: { label: "رد شده", icon: XCircle, color: "rose" },
   expired: { label: "منقضی شده", icon: AlertCircle, color: "slate" },
+  cancelled: { label: "لغو شده", icon: XCircle, color: "slate" },
+  cancellation_requested: { label: "درخواست لغو", icon: Clock, color: "amber" },
   available: { label: "موجود", color: "emerald" },
   temporarily_reserved: { label: "رزرو موقت", icon: Clock, color: "amber" },
   reserved: { label: "رزرو شده", icon: CheckCircle, color: "rose" },

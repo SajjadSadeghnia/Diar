@@ -36,6 +36,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: WRONG_CREDENTIALS }, { status: 401 });
     }
 
+    if (!user.active) {
+      return NextResponse.json({ error: "حساب کاربری شما غیرفعال شده است" }, { status: 403 });
+    }
+
     const token = signToken({ userId: user.id, role: user.role, name: user.name });
     const response = NextResponse.json({ role: user.role });
 

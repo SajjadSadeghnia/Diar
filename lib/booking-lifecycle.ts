@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@prisma/client";
+import type { PrismaTransaction } from "@/lib/prisma-transaction";
 import { prisma } from "@/lib/prisma";
 import {
   enumerateNights,
@@ -9,10 +9,7 @@ import {
   type BookingRange,
 } from "@/lib/booking-utils";
 
-type Tx = Omit<
-  PrismaClient,
-  "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
->;
+type Tx = PrismaTransaction;
 
 /** Expire unpaid holds only — receipt upload lifts the 2h limit (admin review has no deadline). */
 export async function expireStaleBookings(client: Tx | typeof prisma = prisma) {
@@ -33,7 +30,7 @@ export async function fetchBlockingBookings(propertyId: string, client: Tx | typ
   return client.booking.findMany({
     where: {
       propertyId,
-      status: { in: ["approved", "pending_payment"] },
+      status: { in: ["approved", "pending_payment", "cancellation_requested"] },
     },
     select: {
       startDate: true,
@@ -77,7 +74,7 @@ export async function createBookingHold(input: CreateBookingInput) {
     const blocking = await tx.booking.findMany({
       where: {
         propertyId,
-        status: { in: ["approved", "pending_payment"] },
+        status: { in: ["approved", "pending_payment", "cancellation_requested"] },
       },
       select: {
         startDate: true,

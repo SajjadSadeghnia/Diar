@@ -102,7 +102,14 @@ export function toBookingRange(b: {
 
 /** Whether this booking currently blocks calendar dates */
 export function isBookingBlocking(booking: BookingRange, now: Date = new Date()): boolean {
-  if (booking.status === "approved") {
+  if (
+    booking.status === "cancelled" ||
+    booking.status === "rejected" ||
+    booking.status === "expired"
+  ) {
+    return false;
+  }
+  if (booking.status === "approved" || booking.status === "cancellation_requested") {
     return true;
   }
   if (booking.status === "pending_payment") {
@@ -196,6 +203,11 @@ export function validateCooldown(
   return { valid: true };
 }
 
+/** Confirmed reservation — blocks calendar as reserved (not temporary hold). */
+export function isReservedBookingStatus(status: string): boolean {
+  return status === "approved" || status === "cancellation_requested";
+}
+
 export function getBlockedRanges(
   bookings: BookingRange[],
   now: Date = new Date()
@@ -205,7 +217,7 @@ export function getBlockedRanges(
     .map((b) => ({
       startDate: b.startDate,
       endDate: b.endDate,
-      type: b.status === "approved" ? ("reserved" as const) : ("temporary" as const),
+      type: isReservedBookingStatus(b.status) ? ("reserved" as const) : ("temporary" as const),
     }));
 }
 
@@ -215,7 +227,7 @@ export function getPropertyAvailabilityState(
 ): PropertyAvailabilityState {
   const blocking = bookings.filter((b) => isBookingBlocking(b, now));
   if (!blocking.length) return "available";
-  if (blocking.some((b) => b.status === "approved")) return "reserved";
+  if (blocking.some((b) => isReservedBookingStatus(b.status))) return "reserved";
   return "temporarily_reserved";
 }
 

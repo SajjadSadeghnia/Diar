@@ -12,7 +12,16 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   await expireStaleBookings();
 
   const { status } = await req.json();
-  if (!["pending_payment", "approved", "rejected", "expired"].includes(status)) {
+  if (
+    ![
+      "pending_payment",
+      "approved",
+      "rejected",
+      "expired",
+      "cancelled",
+      "cancellation_requested",
+    ].includes(status)
+  ) {
     return NextResponse.json({ error: "وضعیت نامعتبر است" }, { status: 400 });
   }
 

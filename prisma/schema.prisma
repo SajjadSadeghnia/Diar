@@ -22,6 +22,8 @@ enum BookingStatus {
   approved
   rejected
   expired
+  cancelled
+  cancellation_requested
 }
 
 enum PaymentStatus {
@@ -30,34 +32,80 @@ enum PaymentStatus {
   rejected
 }
 
+enum NotificationType {
+  BOOKING_CREATED
+  PAYMENT_DEADLINE_WARNING
+  RECEIPT_UPLOADED
+  AWAITING_ADMIN_REVIEW
+  BOOKING_APPROVED
+  BOOKING_REJECTED
+  BOOKING_CANCELLED
+  CANCELLATION_APPROVED
+  CANCELLATION_DENIED
+  BOOKING_EXPIRED
+  CHECK_IN_REMINDER
+}
+
+enum AuditAction {
+  BOOKING_APPROVED
+  BOOKING_REJECTED
+  BOOKING_CANCELLED
+  CANCELLATION_APPROVED
+  CANCELLATION_DENIED
+  PROPERTY_UPDATED
+  DATE_OVERRIDE_CREATED
+  DATE_OVERRIDE_UPDATED
+  DATE_OVERRIDE_DELETED
+  EMPLOYEE_CREATED
+  EMPLOYEE_UPDATED
+  EMPLOYEE_DEACTIVATED
+  EMPLOYEE_ACTIVATED
+  EMPLOYEE_PASSWORD_RESET
+  EMPLOYEE_DELETED
+  PAYMENT_SETTINGS_UPDATED
+  CONTACT_SETTINGS_UPDATED
+}
+
+enum AuditEntityType {
+  BOOKING
+  USER
+  PROPERTY
+  SYSTEM_SETTING
+  DATE_OVERRIDE
+  PAYMENT
+}
+
 model User {
-  id        String    @id @default(cuid())
-  name      String
-  phone     String    @unique
-  password  String
-  role      Role      @default(employee)
-  createdAt DateTime  @default(now())
-  bookings  Booking[]
+  id            String         @id @default(cuid())
+  name          String
+  phone         String         @unique
+  password      String
+  role          Role           @default(employee)
+  active        Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  bookings      Booking[]
+  notifications Notification[]
+  auditLogs     AuditLog[]     @relation("AdminAuditLogs")
 }
 
 model Property {
-  id           String         @id @default(cuid())
-  title        String
-  description  String
-  address      String         @default("تهران، خیابان ولیعصر")
-  contactPhone String         @default("021-12345678")
-  dailyPrice   Int
-  images       String[]
-  capacity     Int            @default(5)
-  bedrooms     Int            @default(2)
-  bathroomInfo String         @default("یک سرویس ایرانی")
-  seaDistance  String         @default("ورودی دریا از درب داخل شهرک")
-  mapUrl       String?
-  mobileSignal String         @default("مناسب")
-  detailsJson  Json?
-  status       PropertyStatus @default(available)
-  createdAt    DateTime       @default(now())
-  bookings     Booking[]
+  id            String         @id @default(cuid())
+  title         String
+  description   String
+  address       String         @default("تهران، خیابان ولیعصر")
+  contactPhone  String         @default("021-12345678")
+  dailyPrice    Int
+  images        String[]
+  capacity      Int            @default(5)
+  bedrooms      Int            @default(2)
+  bathroomInfo  String         @default("یک سرویس ایرانی")
+  seaDistance   String         @default("ورودی دریا از درب داخل شهرک")
+  mapUrl        String?
+  mobileSignal  String         @default("مناسب")
+  detailsJson   Json?
+  status        PropertyStatus @default(available)
+  createdAt     DateTime       @default(now())
+  bookings      Booking[]
   dateOverrides DateOverride[]
 }
 
@@ -75,18 +123,19 @@ model DateOverride {
 }
 
 model Booking {
-  id          String        @id @default(cuid())
-  userId      String
-  propertyId  String
-  startDate   DateTime
-  endDate     DateTime
-  totalPrice  Int
-  status      BookingStatus @default(pending_payment)
-  expiresAt   DateTime?
-  createdAt   DateTime      @default(now())
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  property    Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  payment     Payment?
+  id            String         @id @default(cuid())
+  userId        String
+  propertyId    String
+  startDate     DateTime
+  endDate       DateTime
+  totalPrice    Int
+  status        BookingStatus  @default(pending_payment)
+  expiresAt     DateTime?
+  createdAt     DateTime       @default(now())
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property      Property       @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  payment       Payment?
+  notifications Notification[]
 }
 
 model Payment {
@@ -100,11 +149,61 @@ model Payment {
 }
 
 model SystemSetting {
-  id           Int      @id
-  cardNumber   String
-  instructions String
-  contactPhone String   @default("021-12345678")
-  contactInfo  String   @default("مدیر سامانه دیار")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                      Int      @id
+  cardNumber              String
+  instructions            String
+  contactPhone            String   @default("021-12345678")
+  contactInfo             String   @default("مدیر سامانه دیار")
+  cancellationCutoffHours Int      @default(24)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String
+  bookingId String?
+  actionUrl String?
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+  metadata  Json?
+  dedupeKey String?
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booking   Booking?         @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, dedupeKey])
+  @@index([userId, readAt, createdAt(sort: Desc)])
+  @@index([userId, createdAt(sort: Desc)])
+}
+
+model AuditLog {
+  id         String          @id @default(cuid())
+  adminId    String
+  action     AuditAction
+  entityType AuditEntityType
+  entityId   String
+  summary    String
+  metadata   Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime        @default(now())
+  admin      User            @relation("AdminAuditLogs", fields: [adminId], references: [id], onDelete: Restrict)
+
+  @@index([createdAt(sort: Desc)])
+  @@index([adminId, createdAt(sort: Desc)])
+  @@index([entityType, entityId])
+  @@index([action, createdAt(sort: Desc)])
+}
+
+model TelegramRecipient {
+  id                   String    @id @default(cuid())
+  chatId               String    @unique
+  label                String
+  active               Boolean   @default(true)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  lastSuccessfulSendAt DateTime?
 }
