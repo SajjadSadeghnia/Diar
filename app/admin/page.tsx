@@ -108,7 +108,7 @@ export default async function AdminDashboard() {
   const countByStatus = Object.fromEntries(statusCounts.map((s) => [s.status, s._count._all]));
 
   return (
-    <main className="mx-auto max-w-7xl space-y-6 px-4 py-6">
+    <div className="mx-auto max-w-7xl space-y-6 px-4 py-6">
       <div className="mb-8">
         <h1 className="font-display text-3xl font-semibold text-ink mb-2">داشبورد مدیریت دیار</h1>
         <p className="text-charcoal-muted">مدیریت ویلا، رزروها و پرداخت‌های کارمندان</p>
@@ -424,6 +424,6 @@ export default async function AdminDashboard() {
           </table>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

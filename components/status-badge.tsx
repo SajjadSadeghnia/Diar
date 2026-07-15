@@ -12,7 +12,7 @@ const statusMap: Record<string, { label: string; icon?: React.ComponentType<{ cl
   cancellation_requested: { label: "درخواست لغو", icon: Clock, color: "amber" },
   available: { label: "موجود", color: "emerald" },
   temporarily_reserved: { label: "رزرو موقت", icon: Clock, color: "amber" },
-  reserved: { label: "رزرو شده", icon: CheckCircle, color: "rose" },
+  reserved: { label: "رزرو شده", icon: XCircle, color: "slate" },
   unavailable: { label: "ناموجود", color: "rose" },
 };
 

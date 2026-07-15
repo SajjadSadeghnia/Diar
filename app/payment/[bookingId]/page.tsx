@@ -220,7 +220,7 @@ export default function PaymentPage() {
         {setting && holdActive && (
           <div className="mb-4 space-y-2 rounded-xl bg-blue-50 p-3 text-sm text-blue-700">
             <p>
-              <span className="font-medium">شماره کارت:</span> {setting.cardNumber}
+              <span className="font-medium">شماره کارت:</span> <span dir="ltr">{setting.cardNumber}</span>
             </p>
             <p>{setting.instructions}</p>
           </div>
@@ -230,7 +230,7 @@ export default function PaymentPage() {
           <form onSubmit={submitPayment} className="space-y-3">
             <input className="input" type="number" placeholder="مبلغ پرداختی" value={amount} readOnly />
             <input
-              className="input min-h-12 file:mr-2 file:rounded-lg file:border-0 file:bg-ink file:px-3 file:py-2 file:text-sm file:text-white"
+              className="input min-h-12 file:ml-2 file:rounded-lg file:border-0 file:bg-ink file:px-3 file:py-2 file:text-sm file:text-white"
               type="file"
               accept="image/jpeg,image/png,image/webp"
               onChange={(e) => setReceipt(e.target.files?.[0] || null)}

@@ -1,14 +1,20 @@
 import Link from "next/link";
 import { Building2 } from "lucide-react";
+import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-export async function SiteFooter() {
+type SiteFooterProps = {
+  hasBottomNav?: boolean;
+};
+
+export async function SiteFooter({ hasBottomNav = false }: SiteFooterProps) {
+  const user = await getCurrentUser();
   const setting = await prisma.systemSetting.findUnique({ where: { id: 1 } });
   const contactPhone = setting?.contactPhone || "021-12345678";
   const contactInfo = setting?.contactInfo || "مدیر سامانه دیار";
 
   return (
-    <footer className="mt-12 bg-ink text-white">
+    <footer className={`mt-12 bg-ink text-white ${hasBottomNav ? "pb-24 md:pb-0" : ""}`}>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 py-10 md:grid-cols-3">
         <div>
           <div className="mb-4 flex items-center gap-3">
@@ -16,7 +22,7 @@ export async function SiteFooter() {
               <Building2 className="h-6 w-6" />
             </div>
             <div>
-              <p className="font-display font-semibold">دیار</p>
+              <p className="font-semibold">دیار</p>
               <p className="text-xs text-white/60">سامانه رزرو داخلی</p>
             </div>
           </div>
@@ -26,14 +32,18 @@ export async function SiteFooter() {
           <h3 className="mb-3 font-semibold text-white/90">دسترسی سریع</h3>
           <div className="space-y-2 text-sm text-white/70">
             <p>
-              <Link href="/">خانه</Link>
+              <Link href={user?.role === "admin" ? "/admin" : "/"}>خانه</Link>
             </p>
-            <p>
-              <Link href="/login">ورود</Link>
-            </p>
-            <p>
-              <Link href="/bookings">رزروهای من</Link>
-            </p>
+            {!user && (
+              <p>
+                <Link href="/login">ورود</Link>
+              </p>
+            )}
+            {user && (
+              <p>
+                <Link href={user.role === "admin" ? "/admin/bookings" : "/bookings"}>رزروها</Link>
+              </p>
+            )}
           </div>
         </div>
 

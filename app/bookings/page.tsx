@@ -26,9 +26,9 @@ export default async function BookingsPage() {
   });
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-6">
+    <div className="mx-auto max-w-6xl px-4 py-6">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <h1 className="font-display text-xl font-semibold text-ink">رزروهای من</h1>
+        <h1 className="page-title">رزروهای من</h1>
         {user.role === "employee" && (
           <Link href={reserveHref} className="btn-primary min-h-11 text-sm">
             رزرو جدید
@@ -54,7 +54,7 @@ export default async function BookingsPage() {
               </p>
               {b.status === "approved" ? (
                 <p className="font-medium text-emerald-700 md:col-span-2">
-                  شماره تماس پشتیبانی: {b.property.contactPhone}
+                  شماره تماس پشتیبانی: <span dir="ltr">{b.property.contactPhone}</span>
                 </p>
               ) : b.status === "expired" ? (
                 <p className="text-charcoal-muted md:col-span-2">مهلت پرداخت تمام شده — تاریخ آزاد است.</p>
@@ -89,6 +89,6 @@ export default async function BookingsPage() {
           <div className="card text-center text-charcoal-muted">رزروی ثبت نشده است.</div>
         )}
       </div>
-    </main>
+    </div>
   );
 }

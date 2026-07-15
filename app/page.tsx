@@ -46,7 +46,7 @@ export default async function HomePage() {
               </h2>
             </header>
 
-            <div className="max-w-xl space-y-5 text-base leading-8 text-gray-100 sm:text-lg sm:leading-9">
+            <div className="max-w-xl space-y-5 text-base leading-8 text-white/90 sm:text-lg sm:leading-9">
               <p>
                 دیار از یک ایده شروع شد؛
                 <br />
@@ -79,25 +79,24 @@ export default async function HomePage() {
 
       <ScrollReveal>
         <section className="py-16">
-          <div className="mx-auto max-w-3xl space-y-6 px-4 text-lg leading-relaxed text-charcoal-muted">
+          <div className="prose-block mx-auto max-w-3xl px-4">
             <p>
-              دیار برای ما، تکه‌ای از دلِ ماست؛<br />
-              و دوست داریم هر روز بزرگ‌تر شود…<br />
-              نه فقط در ظاهر، بلکه در حس خوبی که منتقل می‌کند، در خاطره‌هایی که می‌سازد و در آرامشی که به آدم‌ها هدیه می‌دهد.
+              دیار برای ما، تکه‌ای از دلِ ماست؛
+              و دوست داریم هر روز بزرگ‌تر شود، نه فقط در ظاهر، بلکه در حس خوبی که منتقل می‌کند.
             </p>
             <p>
-              البته این تازه شروع راه ماست.<br />
-              قراره در دیار اتفاق‌های جذاب‌تری شکل بگیره، آدم‌های بیشتری همراه بشوند و اینجا، هر روز بیشتر از قبل، رنگِ زندگی به خودش بگیره.
+              در خاطره‌هایی که می‌سازد و در آرامشی که به آدم‌ها هدیه می‌دهد،
+              این تازه شروع راه ماست.
             </p>
             <p>
-              دیار، ثمره‌ی کلید ماست؛<br />
-              بخشی از فکرها، تصمیم‌ها، سلیقه و حال خوب ما.<br />
-              جایی که با دقت انتخاب شده، آرام‌آرام شکل گرفته و حالا با عشق و حس خوب، آماده‌ی میزبانی از شماست.
+              قرار است در دیار اتفاق‌های جذاب‌تری شکل بگیرد، آدم‌های بیشتری همراه شوند
+              و هر روز بیشتر از قبل، رنگِ زندگی به خودش بگیرد.
             </p>
             <p>
-              قدم‌تون روی چشم.<br />
-              خوش اومدید به دیار.
+              دیار، ثمره‌ی کلید ماست؛ بخشی از فکرها، تصمیم‌ها، سلیقه و حال خوب ما.
+              جایی که با دقت انتخاب شده و حالا با عشق، آماده‌ی میزبانی از شماست.
             </p>
+            <p>قدم‌تون روی چشم. خوش اومدید به دیار.</p>
           </div>
         </section>
       </ScrollReveal>
@@ -108,28 +107,21 @@ export default async function HomePage() {
             <div className="radius-photo relative h-72 overflow-hidden shadow-lg lg:h-96">
               <Image src="/brand/why-diar-window.jpg" alt="چرا دیار؟" fill className="object-cover" />
             </div>
-            <div className="space-y-4 text-lg leading-relaxed text-charcoal-muted">
-              <h2 className="section-title mb-4">چرا دیار؟</h2>
+            <div className="prose-block">
+              <h2 className="section-title !text-ink">چرا دیار؟</h2>
               <p>
-                دیار یعنی<br />
-                جایی که حضور، مهم‌تر از سرعت است.<br />
-                جایی که بودن، ارزشمندتر از رسیدن است.
+                دیار یعنی جایی که حضور، مهم‌تر از سرعت است
+                و بودن، ارزشمندتر از رسیدن.
               </p>
               <p>
-                و ما باور داریم<br />
-                هرجا که آدم‌ها لحظه‌ای حال خوب را تجربه کنند،<br />
-                همان‌جا دیار است؛<br />
-                حتی اگر اسمش را ندانند.
+                ما باور داریم هرجا که آدم‌ها لحظه‌ای حال خوب را تجربه کنند،
+                همان‌جا دیار است؛ حتی اگر اسمش را ندانند.
               </p>
               <p>
-                دیار را باید آرام ساخت…<br />
-                و آرام نگه داشت.<br />
+                دیار را باید آرام ساخت و آرام نگه داشت؛
                 با مراقبت، با حواس، با دل.
               </p>
-              <p>
-                چون بعضی جاها فقط فضا نیستند…<br />
-                تکه‌ای از زندگی‌اند.
-              </p>
+              <p>چون بعضی جاها فقط فضا نیستند — تکه‌ای از زندگی‌اند.</p>
             </div>
           </div>
         </section>
@@ -189,8 +181,8 @@ export default async function HomePage() {
       <ScrollReveal>
         <section className="py-16">
           <div className="mx-auto max-w-4xl rounded-2xl bg-gradient-to-r from-ink to-ink-hover px-6 py-14 text-center text-white">
-            <h2 className="font-display text-2xl font-semibold sm:text-3xl">آماده ثبت رزرو هستید؟</h2>
-            <p className="mt-3 text-gray-200">وارد شوید، تاریخ اقامت را انتخاب کنید و رسید را بارگذاری کنید.</p>
+            <h2 className="section-title text-white">آماده ثبت رزرو هستید؟</h2>
+            <p className="mt-3 text-white/80">وارد شوید، تاریخ اقامت را انتخاب کنید و رسید را بارگذاری کنید.</p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               {property && (
                 <Link

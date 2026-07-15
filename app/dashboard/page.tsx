@@ -36,7 +36,7 @@ export default async function DashboardPage() {
   const reserveHref = property ? `/properties/${property.id}` : "/";
 
   return (
-    <main className="mx-auto max-w-6xl space-y-4 px-4 py-6">
+    <div className="mx-auto max-w-6xl space-y-4 px-4 py-6">
       <div className="grid gap-4 md:grid-cols-3">
         <div className="card">
           <p className="text-charcoal-muted">ویلای سازمانی</p>
@@ -48,7 +48,7 @@ export default async function DashboardPage() {
         </div>
         <div className="card">
           <p className="text-charcoal-muted">در انتظار پرداخت</p>
-          <p className="mt-2 text-2xl font-black text-amber-700">{pendingBookings.length}</p>
+          <p className="mt-2 text-2xl font-bold text-amber-700">{pendingBookings.length}</p>
         </div>
       </div>
 
@@ -111,6 +111,6 @@ export default async function DashboardPage() {
           </p>
         )}
       </div>
-    </main>
+    </div>
   );
 }

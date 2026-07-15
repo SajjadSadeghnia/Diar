@@ -133,7 +133,7 @@ export default function PropertyDetailPage() {
     if (isDateDisabled(date.toDate(), blockedRanges, minCheckIn)) {
       return {
         disabled: true,
-        style: { color: "#cbd5e1", textDecoration: "line-through", pointerEvents: "none" as const },
+        style: { color: "var(--color-line)", textDecoration: "line-through", pointerEvents: "none" as const },
       };
     }
     return {};
@@ -222,7 +222,7 @@ export default function PropertyDetailPage() {
         </div>
 
         <div className="order-1 min-w-0 lg:order-2 lg:col-span-1">
-          <div className="card space-y-4 lg:sticky lg:top-4">
+          <div className="card space-y-4 lg:sticky lg:top-20">
             <h2 className="font-display text-lg font-semibold text-ink">رزرو اقامت</h2>
 
             {!propertyOpen && (

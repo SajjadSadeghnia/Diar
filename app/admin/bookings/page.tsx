@@ -36,10 +36,10 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
   ]);
 
   return (
-    <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-xl font-semibold text-ink">مدیریت رزروها</h1>
+          <h1 className="page-title">مدیریت رزروها</h1>
           <p className="mt-1 text-sm text-charcoal-muted">بررسی و رد رزروهای در انتظار پرداخت</p>
         </div>
         <Link href="/admin" className="btn-secondary text-sm">
@@ -149,6 +149,6 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
           </tbody>
         </table>
       </section>
-    </main>
+    </div>
   );
 }

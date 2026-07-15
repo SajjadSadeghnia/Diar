@@ -165,7 +165,7 @@ export default function AdminPropertiesPage() {
   }
 
   return (
-    <main className="mx-auto max-w-3xl space-y-4 px-4 py-6">
+    <div className="mx-auto max-w-3xl space-y-4 px-4 py-6">
       <Link href="/admin" className="btn-secondary mb-2 inline-flex">
         بازگشت به داشبورد
       </Link>
@@ -240,14 +240,19 @@ export default function AdminPropertiesPage() {
           <form onSubmit={saveOverride} className="grid gap-3 md:grid-cols-2">
             <div>
               <label className="mb-1 block text-xs text-charcoal-muted/70">تاریخ</label>
-              <DatePicker
-                calendar={persian}
-                locale={persian_fa}
-                value={overrideDate || ""}
-                onChange={(v: DateObject | null) => setOverrideDate(v?.toDate?.() ?? null)}
-                inputClass="input"
-                format="YYYY/MM/DD"
-              />
+              <div className="property-date-picker min-w-0 w-full">
+                <DatePicker
+                  calendar={persian}
+                  locale={persian_fa}
+                  value={overrideDate || ""}
+                  onChange={(v: DateObject | null) => setOverrideDate(v?.toDate?.() ?? null)}
+                  containerClassName="w-full"
+                  inputClass="input w-full"
+                  className="w-full"
+                  format="YYYY/MM/DD"
+                  portal
+                />
+              </div>
             </div>
             <div>
               <label className="mb-1 block text-xs text-charcoal-muted/70">قیمت این تاریخ (تومان)</label>
@@ -315,6 +320,6 @@ export default function AdminPropertiesPage() {
           )}
         </div>
       )}
-    </main>
+    </div>
   );
 }

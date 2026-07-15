@@ -58,6 +58,29 @@ body {
   @apply text-2xl font-bold text-ink md:text-3xl;
 }
 
+.page-title {
+  font-family: var(--font-display);
+  @apply text-xl font-semibold text-ink sm:text-2xl;
+}
+
+.prose-block {
+  @apply max-w-prose space-y-5 text-base leading-8 text-charcoal-muted sm:text-lg sm:leading-9;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: var(--color-line);
+  border-radius: 9999px;
+}
+
 .spinner {
   @apply inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white;
 }

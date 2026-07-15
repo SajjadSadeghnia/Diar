@@ -66,7 +66,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
               <button
                 type="button"
                 onClick={() => go(-1)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white opacity-0 transition group-hover:opacity-100 md:opacity-100"
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white opacity-80 transition hover:bg-black/65 md:opacity-100"
                 aria-label="تصویر قبلی"
               >
                 <ChevronRight className="h-5 w-5" />
@@ -74,7 +74,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
               <button
                 type="button"
                 onClick={() => go(1)}
-                className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white opacity-0 transition group-hover:opacity-100 md:opacity-100"
+                className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white opacity-80 transition hover:bg-black/65 md:opacity-100"
                 aria-label="تصویر بعدی"
               >
                 <ChevronLeft className="h-5 w-5" />
