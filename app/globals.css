@@ -25,7 +25,8 @@ body {
 }
 
 .font-display {
-  font-family: var(--font-display);
+  /* Same family as body (Vazirmatn via --font-display); hierarchy via weight/size */
+  font-family: var(--font-display), sans-serif;
 }
 
 .input {

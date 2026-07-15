@@ -35,19 +35,31 @@ export default async function HomePage() {
 
         <div className="relative mx-auto max-w-4xl px-4 py-24">
           <div className="space-y-8 text-white">
-            <h1 className="font-display text-3xl font-semibold leading-tight sm:text-4xl md:text-6xl">
-              رزرو <span className="text-clay-soft">ویلای سازمانی</span> دیار
-            </h1>
-            <div className="max-w-xl space-y-4 text-lg text-gray-100 md:text-xl">
+            <header className="space-y-5">
+              <h1 className="text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">
+                رزرو <span className="text-clay-soft">ویلای سازمانی</span> دیار
+              </h1>
+              <h2 className="text-xl font-medium leading-relaxed text-white/95 sm:text-2xl">
+                جایی برای چند لحظه آسودن،
+                <br />
+                بین شلوغی شهر و فشار کار
+              </h2>
+            </header>
+
+            <div className="max-w-xl space-y-5 text-base leading-8 text-gray-100 sm:text-lg sm:leading-9">
               <p>
-                دیار از یک ایده شروع شد؛<br />
-                اینکه جایی باشه برای چند لحظه آسودن.<br />
-                جایی که بین شلوغی شهر و فشار کار، گاهی بایستید، نفس عمیقی بکشید و دوباره حضور در لحظه را حس کنید.
+                دیار از یک ایده شروع شد؛
+                <br />
+                جایی که گاهی بایستید، نفس عمیقی بکشید
+                <br />
+                و دوباره حضور در لحظه را حس کنید.
               </p>
               <p>
-                دیار برای ما فقط یک اسم نیست؛<br />
-                حسِ خانه است.<br />
-                همان جایی که آدم دلش می‌خواهد چراغش همیشه روشن بماند.
+                دیار برای ما فقط یک اسم نیست؛ حسِ خانه است.
+                <br />
+                همان جایی که آدم دلش می‌خواهد
+                <br />
+                چراغش همیشه روشن بماند.
               </p>
             </div>
 
