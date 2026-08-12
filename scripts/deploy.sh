@@ -70,6 +70,16 @@ npx prisma migrate deploy
 step "npm run build"
 npm run build
 
+step "configure nginx"
+if command -v nginx >/dev/null 2>&1; then
+  bash scripts/configure-nginx.sh || echo "WARNING: nginx configure failed — app still on port 3000"
+else
+  echo "    SKIP: nginx not installed"
+fi
+
+step "setup backup cron"
+bash scripts/setup-backup-cron.sh || echo "WARNING: backup cron setup failed"
+
 step "pm2 restart or start"
 if pm2 describe diar >/dev/null 2>&1; then
   pm2 restart diar
@@ -83,4 +93,7 @@ echo ""
 echo "==> Deploy complete."
 pm2 status diar || true
 echo ""
-echo "Smoke test: curl -I http://127.0.0.1:3000/login"
+echo "Smoke test (app):  curl -s http://127.0.0.1:3000/api/health"
+echo "Smoke test (nginx): curl -sI http://127.0.0.1/login | head -1"
+curl -sf http://127.0.0.1:3000/api/health >/dev/null && echo "    app health: OK" || echo "    app health: FAILED"
+curl -sfI http://127.0.0.1/login 2>/dev/null | head -1 || echo "    nginx: not responding on :80"
