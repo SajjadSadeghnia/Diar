@@ -18,7 +18,12 @@ export function proxy(request: NextRequest) {
   const token = request.cookies.get(authCookieName)?.value;
   const { pathname } = request.nextUrl;
 
-  // Static uploads served from public/
+  // Receipt images must go through authenticated API — block direct public access
+  if (pathname.startsWith("/uploads/receipts/")) {
+    return new NextResponse("Not Found", { status: 404 });
+  }
+
+  // Property images only (still internal app — requires login except login page assets)
   if (pathname.startsWith("/uploads/")) {
     return NextResponse.next();
   }

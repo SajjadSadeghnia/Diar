@@ -1,3 +1,5 @@
+import { requireActiveUser } from "@/lib/auth-session";
+import { isLoginRateLimited, resetLoginRateLimit } from "@/lib/rate-limit";
 import { prisma } from "@/lib/prisma";
 import { isValidPhone, normalizePhone } from "@/lib/phone";
 import bcrypt from "bcryptjs";
@@ -26,6 +28,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: WRONG_CREDENTIALS }, { status: 401 });
     }
 
+    if (isLoginRateLimited(req, phone)) {
+      return NextResponse.json(
+        { error: "تعداد تلاش‌های ورود بیش از حد مجاز است. لطفاً ۱۵ دقیقه دیگر تلاش کنید." },
+        { status: 429 }
+      );
+    }
+
     const user = await prisma.user.findUnique({ where: { phone } });
     if (!user) {
       return NextResponse.json({ error: WRONG_CREDENTIALS }, { status: 401 });
@@ -39,6 +48,8 @@ export async function POST(req: Request) {
     if (!user.active) {
       return NextResponse.json({ error: "حساب کاربری شما غیرفعال شده است" }, { status: 403 });
     }
+
+    resetLoginRateLimit(req, phone);
 
     const token = signToken({ userId: user.id, role: user.role, name: user.name });
     const response = NextResponse.json({ role: user.role });

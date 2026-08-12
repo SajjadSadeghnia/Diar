@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireActiveUser } from "@/lib/auth-session";
 import { fetchBlockingBookings } from "@/lib/booking-lifecycle";
 import {
   closedDateToRange,
@@ -13,8 +13,8 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  const user = await getCurrentUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await requireActiveUser();
+  if ("response" in auth) return auth.response;
 
   const { id } = await params;
   const now = new Date();
