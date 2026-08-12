@@ -32,7 +32,15 @@ export async function SiteHeader() {
             </Link>
 
             {user ? (
-              <ProfileDropdown user={user} />
+              <>
+                <Link
+                  href="/help"
+                  className="rounded-lg px-4 py-2 font-medium text-charcoal-muted transition hover:bg-ink/10 hover:text-ink"
+                >
+                  راهنما
+                </Link>
+                <ProfileDropdown user={user} />
+              </>
             ) : (
               <Link href="/login" className="btn-primary inline-flex items-center gap-2 btn-hover">
                 <LogIn className="h-4 w-4" /> ورود

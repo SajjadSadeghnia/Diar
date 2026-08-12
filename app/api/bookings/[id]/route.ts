@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireActiveUser, requireAdminUser } from "@/lib/auth-session";
 import { expireStaleBookings } from "@/lib/booking-lifecycle";
 import { isBookingExpired } from "@/lib/booking-utils";
 import { prisma } from "@/lib/prisma";
@@ -6,10 +6,8 @@ import { NextResponse } from "next/server";
 
 /** GET single booking for payment continuation (owner or admin read). */
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  const user = await getCurrentUser();
-  if (!user) {
-    return NextResponse.json({ error: "دسترسی غیرمجاز" }, { status: 401 });
-  }
+  const auth = await requireActiveUser();
+  if ("response" in auth) return auth.response;
 
   const { id } = await params;
 
@@ -24,7 +22,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
     return NextResponse.json({ error: "رزرو یافت نشد" }, { status: 404 });
   }
 
-  if (user.role === "employee" && booking.userId !== user.userId) {
+  if (auth.user.role === "employee" && booking.userId !== auth.user.userId) {
     return NextResponse.json({ error: "دسترسی به این رزرو مجاز نیست" }, { status: 403 });
   }
 
@@ -39,12 +37,10 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   return NextResponse.json(booking);
 }
 
-/** Admin-only: permanently delete a booking (and its linked payment via cascade) after it has been approved or rejected. Receipt files on disk are never touched. */
+/** Admin-only: permanently delete a booking after approved/rejected. */
 export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  const user = await getCurrentUser();
-  if (!user || user.role !== "admin") {
-    return NextResponse.json({ error: "دسترسی غیرمجاز" }, { status: 403 });
-  }
+  const auth = await requireAdminUser();
+  if ("response" in auth) return auth.response;
 
   const { id } = await params;
 

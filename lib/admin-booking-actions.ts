@@ -1,5 +1,7 @@
 "use server";
 
+import { requireAdminAction } from "@/lib/auth-session";
+import { notifyBookingRejectedByAdmin } from "@/lib/booking-events";
 import { expireStaleBookings } from "@/lib/booking-lifecycle";
 import { isBookingExpired } from "@/lib/booking-utils";
 import { prisma } from "@/lib/prisma";
@@ -12,12 +14,13 @@ export async function rejectPendingBooking(bookingId: string) {
   }
 
   try {
+    const admin = await requireAdminAction();
     await expireStaleBookings();
 
     await prisma.$transaction(async (tx) => {
       const booking = await tx.booking.findUnique({
         where: { id: bookingId },
-        include: { payment: true },
+        include: { payment: true, user: true, property: true },
       });
 
       if (!booking) {
@@ -44,6 +47,12 @@ export async function rejectPendingBooking(bookingId: string) {
           data: { status: "rejected" },
         });
       }
+
+      await notifyBookingRejectedByAdmin({
+        adminId: admin.userId,
+        booking,
+        tx,
+      });
     });
 
     revalidatePath("/admin");

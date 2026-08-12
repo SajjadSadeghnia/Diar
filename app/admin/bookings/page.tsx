@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { toSecureReceiptUrl } from "@/lib/receipt-url";
 import { StatusBadge } from "@/components/status-badge";
 import { EmployeeInfo } from "@/components/employee-info";
 import { DeleteBookingButton } from "@/components/delete-booking-button";
@@ -87,7 +88,7 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
                     </p>
                   )}
                   {b.payment && (
-                    <Link href={b.payment.receiptPath} target="_blank" className="text-sm text-ink">
+                    <Link href={toSecureReceiptUrl(b.payment.receiptPath)} target="_blank" className="text-sm text-ink">
                       مشاهده رسید بارگذاری‌شده
                     </Link>
                   )}

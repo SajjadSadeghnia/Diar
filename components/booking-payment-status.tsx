@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { toSecureReceiptUrl } from "@/lib/receipt-url";
 import { formatRemainingMs, isBookingExpired } from "@/lib/booking-utils";
 
 type BookingPaymentStatusProps = {
@@ -32,7 +33,7 @@ export function BookingPaymentStatus({
       <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-900">
         <p className="font-medium">فیش شما ثبت شده و در انتظار بررسی است</p>
         {receiptPath ? (
-          <Link href={receiptPath} target="_blank" className="mt-2 inline-block font-semibold text-ink">
+          <Link href={toSecureReceiptUrl(receiptPath)} target="_blank" className="mt-2 inline-block font-semibold text-ink">
             مشاهده فیش
           </Link>
         ) : null}

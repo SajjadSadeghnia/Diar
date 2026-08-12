@@ -7,6 +7,7 @@ import { getBookingDisplayStatus } from "@/lib/booking-utils";
 import { prisma } from "@/lib/prisma";
 import { getSingleProperty } from "@/lib/property";
 import { toToman, toJalaliDate } from "@/lib/utils";
+import { toSecureReceiptUrl } from "@/lib/receipt-url";
 import { redirect } from "next/navigation";
 
 export default async function BookingsPage() {
@@ -66,7 +67,7 @@ export default async function BookingsPage() {
             {b.payment && b.status !== "pending_payment" ? (
               <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-canvas p-3 text-sm">
                 <p>فیش واریزی ثبت شده است.</p>
-                <Link href={b.payment.receiptPath} target="_blank" className="font-semibold text-ink">
+                <Link href={toSecureReceiptUrl(b.payment.receiptPath)} target="_blank" className="font-semibold text-ink">
                   مشاهده فیش
                 </Link>
               </div>

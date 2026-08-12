@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { StatusBadge } from "@/components/status-badge";
 import { formatRemainingMs } from "@/lib/booking-utils";
+import { toSecureReceiptUrl } from "@/lib/receipt-url";
 import { toJalaliDate, toToman } from "@/lib/utils";
 
 type Setting = {
@@ -192,10 +193,10 @@ export default function PaymentPage() {
           <div className="mb-4 space-y-3 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-900">
             <p className="font-medium">فیش پرداخت شما ثبت شده و در انتظار بررسی ادمین است</p>
             <div className="relative h-40 overflow-hidden rounded-lg border border-emerald-200">
-              <Image src={booking.payment!.receiptPath} alt="فیش پرداخت" fill className="object-contain" />
+              <Image src={toSecureReceiptUrl(booking.payment!.receiptPath)} alt="فیش پرداخت" fill unoptimized className="object-contain" />
             </div>
             <Link
-              href={booking.payment!.receiptPath}
+              href={toSecureReceiptUrl(booking.payment!.receiptPath)}
               target="_blank"
               className="inline-block font-semibold text-ink"
             >

@@ -1,14 +1,15 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireActiveUser, requireAdminUser } from "@/lib/auth-session";
+import { fetchBlockingBookings } from "@/lib/booking-lifecycle";
+import { getPropertyAvailabilityState, toBookingRange } from "@/lib/booking-utils";
+import { sanitizePropertyForUser } from "@/lib/property-api";
 import { getSingleProperty } from "@/lib/property";
 import { prisma } from "@/lib/prisma";
 import { saveFile } from "@/lib/upload";
-import { fetchBlockingBookings } from "@/lib/booking-lifecycle";
-import { getPropertyAvailabilityState, toBookingRange } from "@/lib/booking-utils";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const user = await getCurrentUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await requireActiveUser();
+  if ("response" in auth) return auth.response;
 
   const property = await getSingleProperty();
 
@@ -18,22 +19,22 @@ export async function GET() {
 
   const bookings = await fetchBlockingBookings(property.id);
   const ranges = bookings.map(toBookingRange);
-
   const availability = getPropertyAvailabilityState(ranges);
 
   return NextResponse.json([
-    {
-      ...property,
-      availability,
-    },
+    sanitizePropertyForUser(
+      {
+        ...property,
+        availability,
+      },
+      auth.user
+    ),
   ]);
 }
 
 export async function POST(req: Request) {
-  const user = await getCurrentUser();
-  if (!user || user.role !== "admin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-  }
+  const auth = await requireAdminUser();
+  if ("response" in auth) return auth.response;
 
   const existingCount = await prisma.property.count();
   if (existingCount >= 1) {

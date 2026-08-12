@@ -1,13 +1,14 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireActiveUser, requireAdminUser } from "@/lib/auth-session";
 import { fetchBlockingBookings } from "@/lib/booking-lifecycle";
 import { getPropertyAvailabilityState, toBookingRange } from "@/lib/booking-utils";
+import { sanitizePropertyForUser } from "@/lib/property-api";
 import { prisma } from "@/lib/prisma";
 import { saveFile } from "@/lib/upload";
 import { NextResponse } from "next/server";
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  const user = await getCurrentUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await requireActiveUser();
+  if ("response" in auth) return auth.response;
 
   const { id } = await params;
   const property = await prisma.property.findUnique({ where: { id } });
@@ -15,21 +16,23 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 
   const bookings = await fetchBlockingBookings(id);
   const ranges = bookings.map(toBookingRange);
-
   const availability = getPropertyAvailabilityState(ranges);
 
-  return NextResponse.json({
-    ...property,
-    availability,
-    dbStatus: property.status,
-  });
+  return NextResponse.json(
+    sanitizePropertyForUser(
+      {
+        ...property,
+        availability,
+        dbStatus: property.status,
+      },
+      auth.user
+    )
+  );
 }
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const user = await getCurrentUser();
-  if (!user || user.role !== "admin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-  }
+  const auth = await requireAdminUser();
+  if ("response" in auth) return auth.response;
 
   const { id } = await params;
   const formData = await req.formData();

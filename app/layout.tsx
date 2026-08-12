@@ -15,6 +15,12 @@ const vazir = Vazirmatn({
 export const metadata: Metadata = {
   title: "دیار | سامانه رزرو ویلای سازمانی",
   description: "سامانه داخلی رزرو ویلای سازمانی دیار",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "دیار",
+    statusBarStyle: "default",
+  },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

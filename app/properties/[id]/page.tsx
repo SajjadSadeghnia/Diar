@@ -240,9 +240,16 @@ export default function PropertyDetailPage() {
                 {blockedRanges.length > 0 && (
                   <p className="text-charcoal-muted/70">
                     {blockedRanges.filter((r) => r.type === "reserved").length} بازه رزرو شده،{" "}
-                    {blockedRanges.filter((r) => r.type === "temporary").length} بازه موقت
+                    {blockedRanges.filter((r) => r.type === "temporary").length} بازه موقت،{" "}
+                    {blockedRanges.filter((r) => r.type === "closed").length} روز بسته
                   </p>
                 )}
+                <div className="flex flex-wrap gap-2 pt-1 text-xs">
+                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-emerald-800">آزاد</span>
+                  <span className="rounded-full bg-amber-100 px-2 py-0.5 text-amber-800">موقت</span>
+                  <span className="rounded-full bg-slate-100 px-2 py-0.5 text-slate-700">رزرو شده</span>
+                  <span className="rounded-full bg-rose-100 px-2 py-0.5 text-rose-800">بسته</span>
+                </div>
               </div>
             )}
 

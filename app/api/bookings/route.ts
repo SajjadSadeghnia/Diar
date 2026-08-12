@@ -1,15 +1,16 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireActiveUser } from "@/lib/auth-session";
+import { notifyBookingCreated } from "@/lib/booking-events";
 import { createBookingHold, expireStaleBookings } from "@/lib/booking-lifecycle";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const user = await getCurrentUser();
-  if (!user) return NextResponse.json({ error: "دسترسی غیرمجاز" }, { status: 401 });
+  const auth = await requireActiveUser();
+  if ("response" in auth) return auth.response;
 
   await expireStaleBookings();
 
-  const where = user.role === "admin" ? {} : { userId: user.userId };
+  const where = auth.user.role === "admin" ? {} : { userId: auth.user.userId };
   const bookings = await prisma.booking.findMany({
     where,
     include: { property: true, user: true, payment: true },
@@ -20,8 +21,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const user = await getCurrentUser();
-  if (!user || user.role !== "employee") {
+  const auth = await requireActiveUser();
+  if ("response" in auth) return auth.response;
+  if (auth.user.role !== "employee") {
     return NextResponse.json({ error: "دسترسی غیرمجاز" }, { status: 403 });
   }
 
@@ -32,11 +34,20 @@ export async function POST(req: Request) {
     const endDate = new Date(body.endDate);
 
     const booking = await createBookingHold({
-      userId: user.userId,
+      userId: auth.user.userId,
       propertyId,
       startDate,
       endDate,
     });
+
+    const fullBooking = await prisma.booking.findUnique({
+      where: { id: booking.id },
+      include: { user: true, property: true },
+    });
+
+    if (fullBooking) {
+      await notifyBookingCreated(fullBooking);
+    }
 
     return NextResponse.json(booking);
   } catch (error) {

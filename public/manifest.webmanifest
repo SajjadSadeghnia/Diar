@@ -1,0 +1,19 @@
+{
+  "name": "دیار — رزرو ویلای سازمانی",
+  "short_name": "دیار",
+  "description": "سامانه داخلی رزرو ویلای سازمانی",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f2eee1",
+  "theme_color": "#1f3d34",
+  "icons": [
+    {
+      "src": "/brand/hero-shepherd.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}

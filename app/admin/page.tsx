@@ -2,13 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Building2, Calendar, Clock, CheckCircle, XCircle, Settings } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
-import { expireStaleBookings } from "@/lib/booking-lifecycle";
-import {
-  formatRemainingMs,
-  getBookingDisplayStatus,
-  isBookingExpired,
-  shouldShowPaymentCountdown,
-} from "@/lib/booking-utils";
+import { requireAdminAction } from "@/lib/auth-session";
+import { reviewPaymentById } from "@/lib/payment-review";
+import { toSecureReceiptUrl } from "@/lib/receipt-url";
 import { prisma } from "@/lib/prisma";
 import { getSingleProperty } from "@/lib/property";
 import { toJalaliDate, toToman } from "@/lib/utils";
@@ -19,45 +15,24 @@ import { EmployeeInfo } from "@/components/employee-info";
 import { AdminPaymentSettingsModal } from "@/components/admin-payment-settings-modal";
 import { AdminContactSettingsModal } from "@/components/admin-contact-settings-modal";
 import { rejectPendingBookingForm } from "@/lib/admin-booking-actions";
+import { expireStaleBookings } from "@/lib/booking-lifecycle";
+import {
+  formatRemainingMs,
+  getBookingDisplayStatus,
+  shouldShowPaymentCountdown,
+} from "@/lib/booking-utils";
 
 async function reviewPayment(formData: FormData) {
   "use server";
-  const id = String(formData.get("id"));
-  const paymentStatus = String(formData.get("paymentStatus")) as "approved" | "rejected";
-
   try {
-    await expireStaleBookings();
+    const admin = await requireAdminAction();
+    const id = String(formData.get("id"));
+    const paymentStatus = String(formData.get("paymentStatus")) as "approved" | "rejected";
 
-    await prisma.$transaction(async (tx) => {
-      const payment = await tx.payment.findUnique({
-        where: { id },
-        include: { booking: true },
-      });
-
-      if (!payment) {
-        throw new Error("پرداخت یافت نشد");
-      }
-
-      if (paymentStatus === "approved") {
-        if (payment.booking.status !== "pending_payment") {
-          throw new Error("فقط رزروهای در انتظار پرداخت قابل تایید هستند");
-        }
-        if (isBookingExpired({ ...payment.booking, payment })) {
-          await tx.booking.update({ where: { id: payment.bookingId }, data: { status: "expired" } });
-          throw new Error("مهلت رزرو منقضی شده است");
-        }
-      }
-
-      await tx.payment.update({
-        where: { id },
-        data: { status: paymentStatus },
-      });
-
-      const bookingStatus = paymentStatus === "approved" ? "approved" : "rejected";
-      await tx.booking.update({
-        where: { id: payment.bookingId },
-        data: { status: bookingStatus },
-      });
+    await reviewPaymentById({
+      adminId: admin.userId,
+      paymentId: id,
+      paymentStatus,
     });
 
     revalidatePath("/admin");
@@ -65,7 +40,7 @@ async function reviewPayment(formData: FormData) {
     revalidatePath("/");
   } catch (error) {
     console.error("Payment review error:", error);
-    throw new Error("خطا در بررسی پرداخت");
+    throw new Error(error instanceof Error ? error.message : "خطا در بررسی پرداخت");
   }
 }
 
@@ -265,7 +240,7 @@ export default async function AdminDashboard() {
                       <p className="text-amber-800">مهلت پرداخت: {formatRemainingMs(b.expiresAt, now)}</p>
                     )}
                     {b.payment && (
-                      <Link href={b.payment.receiptPath} target="_blank" className="text-sm font-medium text-ink">
+                      <Link href={toSecureReceiptUrl(b.payment.receiptPath)} target="_blank" className="text-sm font-medium text-ink">
                         مشاهده رسید بارگذاری‌شده
                       </Link>
                     )}
@@ -334,10 +309,11 @@ export default async function AdminDashboard() {
                 <p className="text-sm font-medium text-ink mb-2">رسید واریزی:</p>
                 <div className="rounded-lg border border-line overflow-hidden">
                   <Image
-                    src={p.receiptPath}
+                    src={toSecureReceiptUrl(p.receiptPath)}
                     alt="رسید واریزی"
                     width={600}
                     height={200}
+                    unoptimized
                     className="w-full h-auto object-cover"
                   />
                 </div>
@@ -414,7 +390,7 @@ export default async function AdminDashboard() {
                     <StatusBadge status={p.status} />
                   </td>
                   <td>
-                    <Link href={p.receiptPath} target="_blank" className="font-semibold text-ink">
+                    <Link href={toSecureReceiptUrl(p.receiptPath)} target="_blank" className="font-semibold text-ink">
                       مشاهده فیش
                     </Link>
                   </td>

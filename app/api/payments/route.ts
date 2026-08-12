@@ -1,15 +1,14 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireActiveUser, requireAdminUser } from "@/lib/auth-session";
 import { expireStaleBookings } from "@/lib/booking-lifecycle";
+import { notifyReceiptUploaded } from "@/lib/booking-events";
 import { isBookingExpired } from "@/lib/booking-utils";
 import { prisma } from "@/lib/prisma";
 import { saveFile } from "@/lib/upload";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const user = await getCurrentUser();
-  if (!user || user.role !== "admin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-  }
+  const auth = await requireAdminUser();
+  if ("response" in auth) return auth.response;
 
   await expireStaleBookings();
 
@@ -22,8 +21,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const user = await getCurrentUser();
-  if (!user || user.role !== "employee") {
+  const auth = await requireActiveUser();
+  if ("response" in auth) return auth.response;
+  if (auth.user.role !== "employee") {
     return NextResponse.json({ error: "دسترسی غیرمجاز" }, { status: 403 });
   }
 
@@ -48,10 +48,10 @@ export async function POST(req: Request) {
 
       const booking = await tx.booking.findUnique({
         where: { id: bookingId },
-        include: { payment: true },
+        include: { payment: true, user: true, property: true },
       });
 
-      if (!booking || booking.userId !== user.userId) {
+      if (!booking || booking.userId !== auth.user.userId) {
         throw new Error("رزرو یافت نشد");
       }
 
@@ -77,6 +77,8 @@ export async function POST(req: Request) {
       const payment = await tx.payment.create({
         data: { bookingId, amount, receiptPath, status: "pending" },
       });
+
+      await notifyReceiptUploaded(booking, tx);
 
       return { payment, booking };
     });

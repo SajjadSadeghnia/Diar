@@ -1,16 +1,13 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireAdminUser } from "@/lib/auth-session";
 import { getNightKey } from "@/lib/booking-utils";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
-/** List all per-date overrides for the property (admin only — includes prices). */
 export async function GET(_: Request, { params }: RouteParams) {
-  const user = await getCurrentUser();
-  if (!user || user.role !== "admin") {
-    return NextResponse.json({ error: "دسترسی غیرمجاز" }, { status: 403 });
-  }
+  const auth = await requireAdminUser();
+  if ("response" in auth) return auth.response;
 
   const { id } = await params;
   const overrides = await prisma.dateOverride.findMany({
@@ -28,12 +25,9 @@ export async function GET(_: Request, { params }: RouteParams) {
   );
 }
 
-/** Upsert one date's override: custom price and/or closed flag (admin only). */
 export async function POST(req: Request, { params }: RouteParams) {
-  const user = await getCurrentUser();
-  if (!user || user.role !== "admin") {
-    return NextResponse.json({ error: "دسترسی غیرمجاز" }, { status: 403 });
-  }
+  const auth = await requireAdminUser();
+  if ("response" in auth) return auth.response;
 
   const { id } = await params;
   const body = await req.json();
@@ -58,7 +52,6 @@ export async function POST(req: Request, { params }: RouteParams) {
     return NextResponse.json({ error: "ملک یافت نشد" }, { status: 404 });
   }
 
-  // No price and not closed => nothing to override; remove any existing row.
   if (price === null && !closed) {
     await prisma.dateOverride.deleteMany({ where: { propertyId: id, date } });
     return NextResponse.json({ removed: true });
@@ -78,12 +71,9 @@ export async function POST(req: Request, { params }: RouteParams) {
   });
 }
 
-/** Remove a date's override (admin only). */
 export async function DELETE(req: Request, { params }: RouteParams) {
-  const user = await getCurrentUser();
-  if (!user || user.role !== "admin") {
-    return NextResponse.json({ error: "دسترسی غیرمجاز" }, { status: 403 });
-  }
+  const auth = await requireAdminUser();
+  if ("response" in auth) return auth.response;
 
   const { id } = await params;
   const body = await req.json();

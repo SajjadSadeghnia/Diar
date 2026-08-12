@@ -4,7 +4,9 @@ import { StatusBadge } from "@/components/status-badge";
 import { getBookingDisplayStatus } from "@/lib/booking-utils";
 import { toJalaliDate } from "@/lib/utils";
 import { EmployeeInfo } from "@/components/employee-info";
-import { getCurrentUser } from "@/lib/auth";
+import { requireAdminAction } from "@/lib/auth-session";
+import { reviewPaymentById } from "@/lib/payment-review";
+import { toSecureReceiptUrl } from "@/lib/receipt-url";
 import { prisma } from "@/lib/prisma";
 import { toToman } from "@/lib/utils";
 import { redirect } from "next/navigation";
@@ -12,12 +14,15 @@ import { revalidatePath } from "next/cache";
 
 async function reviewPayment(formData: FormData) {
   "use server";
+  const admin = await requireAdminAction();
   const id = String(formData.get("id"));
   const paymentStatus = String(formData.get("paymentStatus")) as "approved" | "rejected";
-  const bookingStatus = paymentStatus === "approved" ? "approved" : "rejected";
 
-  const payment = await prisma.payment.update({ where: { id }, data: { status: paymentStatus } });
-  await prisma.booking.update({ where: { id: payment.bookingId }, data: { status: bookingStatus } });
+  await reviewPaymentById({
+    adminId: admin.userId,
+    paymentId: id,
+    paymentStatus,
+  });
 
   revalidatePath("/admin/payments");
   revalidatePath("/admin/bookings");
@@ -25,7 +30,7 @@ async function reviewPayment(formData: FormData) {
 }
 
 export default async function AdminPaymentsPage() {
-  const user = await getCurrentUser();
+  const user = await requireAdminAction().catch(() => null);
   if (!user) redirect("/login");
   if (user.role !== "admin") redirect("/");
 
@@ -66,7 +71,14 @@ export default async function AdminPaymentsPage() {
             <p className="mt-2 text-sm">
               مبلغ: <span dir="ltr">{toToman(p.amount)}</span>
             </p>
-            <Image src={p.receiptPath} alt="رسید" width={360} height={180} className="mt-3 max-w-full rounded-lg border border-line" />
+            <Image
+              src={toSecureReceiptUrl(p.receiptPath)}
+              alt="رسید"
+              width={360}
+              height={180}
+              unoptimized
+              className="mt-3 max-w-full rounded-lg border border-line"
+            />
             {p.status === "pending" && (
               <form action={reviewPayment} className="mt-3 flex flex-wrap gap-2">
                 <input type="hidden" name="id" value={p.id} />
