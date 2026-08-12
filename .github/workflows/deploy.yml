@@ -18,4 +18,7 @@ jobs:
           key: ${{ secrets.DROPLET_SSH_KEY }}
           script: |
             cd /var/www/diar/app
+            git pull origin main
             bash scripts/deploy.sh
+            bash scripts/configure-nginx.sh || echo "WARNING: nginx configure failed"
+            bash scripts/setup-backup-cron.sh || echo "WARNING: backup cron setup failed"

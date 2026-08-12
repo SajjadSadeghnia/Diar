@@ -54,6 +54,10 @@ step() {
 step "git pull"
 if [[ -d .git ]]; then
   git pull
+  if git diff-tree --no-commit-id --name-only -r ORIG_HEAD HEAD 2>/dev/null | grep -q '^scripts/deploy.sh$'; then
+    echo "==> deploy.sh updated — re-running with latest steps"
+    exec bash "${BASH_SOURCE[0]}" "$@"
+  fi
 else
   echo "    SKIP: not a git repository (OK on first manual install)."
 fi
