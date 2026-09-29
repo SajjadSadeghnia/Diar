@@ -116,7 +116,7 @@ export default function LoginPage() {
       </div>
 
       <div className="relative hidden lg:block lg:w-1/2">
-        <Image src="/brand/login-umbrellas.jpg" alt="" fill className="object-cover" />
+        <Image src="/brand/login-villa-dusk.jpg" alt="" fill className="object-cover" />
       </div>
     </div>
   );

@@ -30,7 +30,7 @@ export default async function HomePage() {
   return (
     <div>
       <section className="relative min-h-[85vh] overflow-hidden">
-        <Image src="/brand/hero-shepherd.jpg" alt="دیار" fill className="animate-ken-burns object-cover" />
+        <Image src="/brand/hero-villa-pool.jpg" alt="ویلای سازمانی دیار" fill className="animate-ken-burns object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
 
         <div className="relative mx-auto max-w-4xl px-4 py-24">

@@ -18,8 +18,9 @@ valid:      false
 ```
 This is the exact scenario the internal-staff audience is likely to hit on a phone. **Fixed** — see below.
 
-### 3. No rate limiting on login
-`POST /api/auth/login` has no throttling, lockout, or CAPTCHA. Verified live: 6 rapid wrong-password requests all returned `401` with no delay or block. Combined with the fact that all 93 staff accounts were provisioned with auto-generated passwords from a single CSV (see Medium #12), an unthrottled login endpoint is a real brute-force exposure. **Fixed** — see below.
+### 3. Next.js 16.2.4 has known critical CVEs
+`npm audit` flagged a critical-severity Next.js advisory bundle affecting the installed `16.2.4`, including a middleware/proxy bypass (App Router segment-prefetch routes), cache-poisoning via RSC response collisions, an unauthenticated RCE in the Image Optimization API (AVIF handling), and several DoS vectors. The middleware-bypass items are directly relevant to the `proxy.ts` weakness in High #6 below — they turn a "not currently exploitable in this app's own code" gap into one that could be triggered by a framework-level bug instead.
+**Fixed** — upgraded to `16.3.6` (same major version, non-breaking per the fix advisory). Verified `npm run build` completes cleanly and the TypeScript check passes with the new version. This also pulled in patched `postcss` and reduced `npm audit` from 13 vulnerabilities (1 critical, 9 high) down to 4 (all in Prisma's CLI tooling or a Windows-only esbuild dev-server issue — not exploitable in this Linux production deployment, and fixing them requires a Prisma major-version bump I'm leaving for you to schedule deliberately, per "no destructive migrations without asking").
 
 ## High
 
@@ -37,7 +38,8 @@ This is the exact scenario the internal-staff audience is likely to hit on a pho
 **Verified not currently exploitable:** every real page (`app/admin/page.tsx`, `app/dashboard/page.tsx`, etc.) and every API route independently calls `getCurrentUser()`/`getUserFromRequest()`, which do proper `jwt.verify()` with the real secret — so a forged token gets bounced by the actual page/API even if middleware let it through. This is a defense-in-depth gap and a risky pattern for future code (a new route that trusts the middleware's redirect logic without re-verifying would be a real bypass), not a live vulnerability today. Recommend verifying the signature in the middleware too, or at minimum leaving a comment warning future editors not to trust it for authorization.
 
 ### 7. Missing security headers
-Confirmed via response headers: `x-powered-by: Next.js` (leaks framework), and no Content-Security-Policy, no `X-Frame-Options`/`frame-ancestors`, no `Referrer-Policy`, no `Permissions-Policy`. Only `x-content-type-options` and Cloudflare's HSTS were present. **Fixed** — see below.
+Confirmed via response headers: `x-powered-by: Next.js` (leaks framework), and no Content-Security-Policy, no `X-Frame-Options`/`frame-ancestors`, no `Referrer-Policy`, no `Permissions-Policy`. Only `x-content-type-options` and Cloudflare's HSTS were present.
+**Fixed:** disabled `x-powered-by`, added `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` (blocks camera/mic/geolocation). **Deliberately left out:** a Content-Security-Policy — this app has enough moving parts (Next's own inline hydration data, the date-picker library, dynamically loaded images) that shipping a CSP without dedicated testing risks breaking the live app for all 93 staff. `X-Frame-Options: DENY` already covers the main clickjacking risk a CSP would add. If you want a CSP, it deserves its own testing pass rather than being bundled into this one.
 
 ### 8. Accessibility (Lighthouse-confirmed, a11y score 82/100)
 - Password show/hide toggle button (`app/(auth)/login/page.tsx`) has no accessible name and a 20×20px tap target (needs ≥24×24px).
@@ -79,6 +81,7 @@ Your development machine has `165.245.245.149 diar.life www.diar.life` in `/etc/
 - `bfcache` is blocked by `Cache-Control: no-store` on authenticated pages — a reasonable tradeoff for an auth-gated app, not worth changing.
 
 ## What's already good
+- Login is properly rate-limited (`lib/rate-limit.ts`): 10 attempts per 15 minutes, keyed by IP+phone. Verified live — the 11th rapid wrong-password attempt against the same number correctly returned `429`.
 - Persian typography (Vazirmatn via `next/font/google`), RTL layout, and the dark-green/clay-orange/cream palette ("Shomal Dusk") are well thought out — contrast ratios I spot-checked (body text on canvas, button text, footer text) all clear WCAG AA comfortably.
 - Passwords are hashed with bcrypt and compared with `bcrypt.compare` (timing-safe); the login error message doesn't leak which field was wrong.
 - Auth cookie is correctly `Secure; HttpOnly; SameSite=None` in production — verified via a real login response (Next.js correctly picks up `X-Forwarded-Proto` from nginx).
