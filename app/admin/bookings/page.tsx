@@ -37,16 +37,16 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
   ]);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="page-shell space-y-6">
+      <header className="page-intro">
         <div>
           <h1 className="page-title">مدیریت رزروها</h1>
-          <p className="mt-1 text-sm text-charcoal-muted">بررسی و رد رزروهای در انتظار پرداخت</p>
+          <p className="page-description">بررسی و رد رزروهای در انتظار پرداخت</p>
         </div>
         <Link href="/admin" className="btn-secondary text-sm">
           بازگشت به داشبورد
         </Link>
-      </div>
+      </header>
 
       {params.success && (
         <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
@@ -109,46 +109,50 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
         </div>
       </section>
 
-      <section className="card overflow-x-auto">
+      <section className="card">
         <h2 className="mb-4 text-lg font-bold text-ink">همه رزروها</h2>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-line text-right">
-              <th className="py-2">کارمند</th>
-              <th className="py-2">تماس</th>
-              <th>ملک</th>
-              <th>بازه</th>
-              <th>وضعیت</th>
-              <th>مهلت پرداخت</th>
-              <th>عملیات</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allBookings.map((b) => (
-              <tr key={b.id} className="border-b border-line/60">
-                <td className="py-3">{b.user.name}</td>
-                <td className="py-3" dir="ltr">
-                  {b.user.phone || "—"}
-                </td>
-                <td>{b.property.title}</td>
-                <td>
-                  {toJalaliDate(b.startDate)} تا {toJalaliDate(b.endDate)}
-                </td>
-                <td>
-                  <StatusBadge status={getBookingDisplayStatus(b)} />
-                </td>
-                <td className="text-amber-700">
-                  {shouldShowPaymentCountdown(b) && b.expiresAt
-                    ? formatRemainingMs(b.expiresAt, now)
-                    : "—"}
-                </td>
-                <td>
-                  <DeleteBookingButton bookingId={b.id} status={b.status} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {allBookings.length ? (
+          <div className="overflow-x-auto">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>کارمند</th>
+                  <th>تماس</th>
+                  <th>ملک</th>
+                  <th>بازه</th>
+                  <th>وضعیت</th>
+                  <th>مهلت پرداخت</th>
+                  <th>عملیات</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allBookings.map((b) => (
+                  <tr key={b.id}>
+                    <td>{b.user.name}</td>
+                    <td dir="ltr">{b.user.phone || "—"}</td>
+                    <td>{b.property.title}</td>
+                    <td>
+                      {toJalaliDate(b.startDate)} تا {toJalaliDate(b.endDate)}
+                    </td>
+                    <td>
+                      <StatusBadge status={getBookingDisplayStatus(b)} />
+                    </td>
+                    <td className="text-amber-700">
+                      {shouldShowPaymentCountdown(b) && b.expiresAt ? formatRemainingMs(b.expiresAt, now) : "—"}
+                    </td>
+                    <td>
+                      <DeleteBookingButton bookingId={b.id} status={b.status} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="empty-state">
+            <p className="font-medium text-charcoal-muted">هنوز رزروی ثبت نشده است.</p>
+          </div>
+        )}
       </section>
     </div>
   );

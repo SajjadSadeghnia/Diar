@@ -8,11 +8,11 @@ export default async function HelpPage() {
   if (!user) redirect("/login");
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8 px-4 py-8">
-      <div>
+    <div className="page-shell max-w-3xl space-y-8">
+      <header>
         <h1 className="page-title">راهنمای رزرو دیار</h1>
-        <p className="mt-2 text-sm text-charcoal-muted">قوانین و مراحل رزرو ویلای سازمانی</p>
-      </div>
+        <p className="page-description">قوانین و مراحل رزرو ویلای سازمانی</p>
+      </header>
 
       <section className="card space-y-4">
         <h2 className="font-display text-lg font-semibold text-ink">مراحل رزرو</h2>

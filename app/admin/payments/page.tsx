@@ -5,29 +5,11 @@ import { getBookingDisplayStatus } from "@/lib/booking-utils";
 import { toJalaliDate } from "@/lib/utils";
 import { EmployeeInfo } from "@/components/employee-info";
 import { requireAdminAction } from "@/lib/auth-session";
-import { reviewPaymentById } from "@/lib/payment-review";
+import { reviewPaymentForm } from "@/lib/admin-payment-actions";
 import { toSecureReceiptUrl } from "@/lib/receipt-url";
 import { prisma } from "@/lib/prisma";
 import { toToman } from "@/lib/utils";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
-
-async function reviewPayment(formData: FormData) {
-  "use server";
-  const admin = await requireAdminAction();
-  const id = String(formData.get("id"));
-  const paymentStatus = String(formData.get("paymentStatus")) as "approved" | "rejected";
-
-  await reviewPaymentById({
-    adminId: admin.userId,
-    paymentId: id,
-    paymentStatus,
-  });
-
-  revalidatePath("/admin/payments");
-  revalidatePath("/admin/bookings");
-  revalidatePath("/bookings");
-}
 
 export default async function AdminPaymentsPage() {
   const user = await requireAdminAction().catch(() => null);
@@ -40,20 +22,22 @@ export default async function AdminPaymentsPage() {
   });
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="page-shell space-y-6">
+      <header className="page-intro">
         <div>
           <h1 className="page-title">مدیریت پرداخت‌ها</h1>
-          <p className="mt-1 text-sm text-charcoal-muted">بررسی و تایید رسیدهای بارگذاری‌شده</p>
+          <p className="page-description">بررسی و تایید رسیدهای بارگذاری‌شده</p>
         </div>
         <Link href="/admin" className="btn-secondary text-sm">
           بازگشت به داشبورد
         </Link>
-      </div>
+      </header>
 
       <div className="grid gap-4">
         {payments.length === 0 && (
-          <p className="card text-center text-charcoal-muted">پرداختی ثبت نشده است.</p>
+          <div className="empty-state">
+            <p className="font-medium text-charcoal-muted">پرداختی ثبت نشده است.</p>
+          </div>
         )}
         {payments.map((p) => (
           <div className="card" key={p.id}>
@@ -80,7 +64,7 @@ export default async function AdminPaymentsPage() {
               className="mt-3 max-w-full rounded-lg border border-line"
             />
             {p.status === "pending" && (
-              <form action={reviewPayment} className="mt-3 flex flex-wrap gap-2">
+              <form action={reviewPaymentForm} className="mt-3 flex flex-wrap gap-2">
                 <input type="hidden" name="id" value={p.id} />
                 <button className="btn-primary" name="paymentStatus" value="approved">
                   تایید پرداخت

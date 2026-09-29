@@ -178,15 +178,15 @@ export default function PropertyDetailPage() {
   const details = property.details;
 
   return (
-    <div className="mx-auto w-full min-w-0 max-w-6xl overflow-x-hidden px-4 py-6">
+    <div className="page-shell min-w-0 overflow-x-hidden">
       <Link href="/" className="btn-secondary mb-4 inline-flex">
         بازگشت به خانه
       </Link>
 
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <header className="page-intro min-w-0 items-start">
         <div className="min-w-0 flex-1">
           <h1 className="font-display break-words text-2xl font-semibold text-ink md:text-3xl">{property.title}</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-charcoal-muted">{property.description}</p>
+          <p className="page-description">{property.description}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <span className="rounded-full bg-ink/10 px-3 py-1 text-xs font-medium text-ink">
               ظرفیت {property.capacity} نفر
@@ -204,7 +204,7 @@ export default function PropertyDetailPage() {
             <StatusBadge status={displayStatus} size="md" />
           </div>
         )}
-      </div>
+      </header>
 
       <div className="grid min-w-0 gap-6 lg:grid-cols-3 lg:gap-8">
         <div className="order-2 min-w-0 space-y-6 lg:order-1 lg:col-span-2 lg:space-y-8">

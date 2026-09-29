@@ -165,7 +165,7 @@ export default function AdminPropertiesPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-4 px-4 py-6">
+    <div className="page-shell max-w-3xl space-y-4">
       <Link href="/admin" className="btn-secondary mb-2 inline-flex">
         بازگشت به داشبورد
       </Link>
@@ -282,28 +282,28 @@ export default function AdminPropertiesPage() {
 
           {overrides.length > 0 && (
             <div className="mt-5 overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="data-table">
                 <thead>
-                  <tr className="border-b border-line text-right">
-                    <th className="py-2">تاریخ</th>
-                    <th className="py-2">قیمت</th>
-                    <th className="py-2">وضعیت</th>
-                    <th className="py-2"></th>
+                  <tr>
+                    <th>تاریخ</th>
+                    <th>قیمت</th>
+                    <th>وضعیت</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   {overrides.map((o) => (
-                    <tr key={o.id} className="border-b border-line/60">
-                      <td className="py-2">{toJalaliDate(o.date)}</td>
-                      <td className="py-2">{o.price != null ? toToman(o.price) : "—"}</td>
-                      <td className="py-2">
+                    <tr key={o.id}>
+                      <td>{toJalaliDate(o.date)}</td>
+                      <td>{o.price != null ? toToman(o.price) : "—"}</td>
+                      <td>
                         {o.closed ? (
                           <span className="rounded-full bg-rose-100 px-2 py-0.5 text-xs text-rose-700">بسته</span>
                         ) : (
                           <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700">باز</span>
                         )}
                       </td>
-                      <td className="py-2 text-left">
+                      <td className="text-left">
                         <button
                           type="button"
                           className="text-xs text-rose-600 underline"

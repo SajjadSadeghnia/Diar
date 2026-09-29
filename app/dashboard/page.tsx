@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { CalendarDays, House, Plus } from "lucide-react";
 import { BookingPaymentStatus } from "@/components/booking-payment-status";
+import { StatCard } from "@/components/stat-card";
 import { StatusBadge } from "@/components/status-badge";
 import { getCurrentUser } from "@/lib/auth";
 import { expireStaleBookings } from "@/lib/booking-lifecycle";
@@ -36,21 +38,33 @@ export default async function DashboardPage() {
   const reserveHref = property ? `/properties/${property.id}` : "/";
 
   return (
-    <div className="mx-auto max-w-6xl space-y-4 px-4 py-6">
-      <div className="grid gap-4 md:grid-cols-3">
-        <div className="card">
-          <p className="text-charcoal-muted">ویلای سازمانی</p>
-          <p className="mt-2 text-lg font-bold text-ink">{property?.title || "تنظیم نشده"}</p>
+    <div className="page-shell space-y-5">
+      <header className="page-intro">
+        <div>
+          <h1 className="page-title">سلام، {user.name}</h1>
+          <p className="page-description">رزروهای جاری و مسیر سریع ثبت اقامت بعدی‌تان را از اینجا پیگیری کنید.</p>
         </div>
-        <div className="card">
-          <p className="text-charcoal-muted">تعداد رزروهای من</p>
-          <p className="mt-2 text-2xl font-bold text-ink">{bookingsCount}</p>
-        </div>
-        <div className="card">
-          <p className="text-charcoal-muted">در انتظار پرداخت</p>
-          <p className="mt-2 text-2xl font-bold text-amber-700">{pendingBookings.length}</p>
-        </div>
-      </div>
+        <Link className="btn-primary inline-flex items-center gap-2" href={reserveHref}>
+          <Plus className="h-4 w-4" /> رزرو جدید
+        </Link>
+      </header>
+
+      <section className="grid gap-4 md:grid-cols-3">
+        <StatCard
+          label="ویلای سازمانی"
+          value={property?.title || "تنظیم نشده"}
+          valueClassName="text-lg"
+          icon={<House className="h-5 w-5" />}
+          accent="ink"
+        />
+        <StatCard
+          label="تعداد رزروهای من"
+          value={bookingsCount}
+          icon={<CalendarDays className="h-5 w-5" />}
+          accent="sea"
+        />
+        <StatCard label="در انتظار پرداخت" value={pendingBookings.length} accent="amber" />
+      </section>
 
       {pendingBookings.length > 0 && (
         <section className="card">
@@ -82,10 +96,10 @@ export default async function DashboardPage() {
         </section>
       )}
 
-      <div className="card">
+      <section className="card">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-display text-lg font-semibold text-ink">میان‌برها</h2>
-          <Link className="btn-primary min-h-11 text-sm duration-200 hover:-translate-y-0.5 hover:brightness-110" href={reserveHref}>
+          <Link className="btn-secondary min-h-11 text-sm" href={reserveHref}>
             رزرو جدید
           </Link>
         </div>
@@ -110,7 +124,7 @@ export default async function DashboardPage() {
             آخرین رزرو: {lastBooking.property.title} — {toToman(lastBooking.totalPrice)}
           </p>
         )}
-      </div>
+      </section>
     </div>
   );
 }

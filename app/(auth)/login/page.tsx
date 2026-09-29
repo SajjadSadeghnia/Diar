@@ -39,15 +39,15 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-[70vh] lg:flex">
-      <div className="flex flex-1 items-center justify-center p-8">
-        <div className="w-full max-w-md">
+    <div className="grid min-h-[calc(100vh-4.75rem)] lg:grid-cols-[minmax(0,0.94fr)_minmax(30rem,1.06fr)]">
+      <div className="flex items-center justify-center px-4 py-10 sm:px-8 lg:py-16">
+        <div className="w-full max-w-md animate-slide-up">
           <div className="mb-8 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-ink">
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-ink shadow-[0_10px_24px_rgba(31,61,52,0.2)]">
               <Building2 className="h-8 w-8 text-white" />
             </div>
-            <h1 className="font-display mb-2 text-3xl font-semibold text-ink">ورود به حساب کاربری</h1>
-            <p className="mt-2 text-sm text-charcoal-muted sm:text-base">ورود کارمندان و مدیر سامانه برای رزرو ویلای سازمانی</p>
+            <h1 className="font-display text-3xl font-bold tracking-[-0.025em] text-ink">ورود به دیار</h1>
+            <p className="mt-3 text-sm leading-7 text-charcoal-muted sm:text-base">برای مشاهده زمان‌های آزاد و مدیریت رزروها وارد حساب کاربری خود شوید.</p>
           </div>
 
           {error && (
@@ -56,10 +56,10 @@ export default function LoginPage() {
             </div>
           )}
 
-          <form onSubmit={onSubmit} className="space-y-4">
+          <form onSubmit={onSubmit} className="card space-y-5 p-5 sm:p-6">
             <div>
               <label htmlFor="login-phone" className="mb-2 block text-sm font-medium text-charcoal-muted">
-                اطلاعات کاربر
+                شماره همراه
               </label>
               <div className="relative">
                 <Phone className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-charcoal-muted/50" />
@@ -73,9 +73,11 @@ export default function LoginPage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="09123456789"
+                  aria-describedby="login-phone-hint"
                   required
                 />
               </div>
+              <p id="login-phone-hint" className="mt-2 text-xs text-charcoal-muted/75">شماره همراه ثبت‌شده در سامانه را وارد کنید.</p>
             </div>
 
             <div>
@@ -98,7 +100,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => setShowPassword((s) => !s)}
                   aria-label={showPassword ? "پنهان کردن رمز عبور" : "نمایش رمز عبور"}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 p-1 text-charcoal-muted/50"
+                  className="absolute left-2 top-1/2 min-h-10 min-w-10 -translate-y-1/2 rounded-lg p-2 text-charcoal-muted/70 transition-colors hover:bg-ink-soft hover:text-ink"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -106,7 +108,7 @@ export default function LoginPage() {
             </div>
 
             <button
-              className="btn-primary min-h-12 w-full py-3 text-base duration-200 hover:-translate-y-0.5 hover:brightness-110"
+              className="btn-primary min-h-12 w-full py-3 text-base"
               disabled={loading}
             >
               {loading ? "در حال ورود..." : "ورود به حساب"}
@@ -115,8 +117,13 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="relative hidden lg:block lg:w-1/2">
-        <Image src="/brand/login-villa-dusk.jpg" alt="" fill className="object-cover" />
+      <div className="relative hidden overflow-hidden lg:block">
+        <Image src="/brand/login-villa-dusk.jpg" alt="نمایی از ویلای دیار در غروب" fill priority className="object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 p-10 text-white xl:p-14">
+          <p className="max-w-md text-2xl font-semibold leading-relaxed xl:text-3xl">یک اقامت آرام، با رزروی روشن و ساده.</p>
+          <p className="mt-4 max-w-md text-sm leading-7 text-white/80 xl:text-base">دیار، سامانه داخلی رزرو ویلای سازمانی برای همکاران شرکت است.</p>
+        </div>
       </div>
     </div>
   );

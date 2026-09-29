@@ -13,6 +13,7 @@ import { redirect } from "next/navigation";
 export default async function HomePage() {
   const user = await getCurrentUser();
   if (user?.role === "admin") redirect("/admin");
+  if (user?.role === "employee") redirect("/dashboard");
   const property = await Promise.race([
     getSingleProperty(),
     new Promise<null>((_, reject) => setTimeout(() => reject(new Error("db-timeout")), 1500)),

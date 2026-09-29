@@ -9,11 +9,15 @@
 @theme {
   --color-ink: #1f3d34;
   --color-ink-hover: #16302a;
+  --color-ink-soft: #e7efe9;
   --color-clay: #a8501f;
   --color-clay-soft: #c1652f;
   --color-clay-hover: #8f4219;
+  --color-sea: #2d6c70;
+  --color-sea-soft: #e5f1f0;
   --color-canvas: #f2eee1;
   --color-canvas-raised: #fbf9f3;
+  --color-canvas-muted: #e9e3d5;
   --color-charcoal: #2a2420;
   --color-charcoal-muted: #5c5346;
   --color-line: #ded3c4;
@@ -22,7 +26,26 @@
 body {
   background-color: var(--color-canvas);
   color: var(--color-charcoal);
+  background-image: radial-gradient(circle at 100% 0%, rgba(45, 108, 112, 0.07), transparent 28rem);
+  text-rendering: optimizeLegibility;
 }
+
+::selection {
+  background: color-mix(in srgb, var(--color-clay) 28%, white);
+  color: var(--color-ink-hover);
+}
+
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-clay-soft) 72%, white);
+  outline-offset: 3px;
+}
+
+/* Components go in Tailwind's `components` layer (not left unlayered) so a
+   plain utility class like `border-ink/10` on the same element can actually
+   override a color these rules set — unlayered CSS always wins the cascade
+   over layered utilities regardless of specificity, which silently killed
+   every `hover:border-*` accent on `.card` before this layer existed. */
+@layer components {
 
 .font-display {
   /* Same family as body (Vazirmatn via --font-display); hierarchy via weight/size */
@@ -30,19 +53,19 @@ body {
 }
 
 .input {
-  @apply w-full rounded-lg border border-line bg-canvas-raised px-3 py-2 text-sm text-charcoal outline-none transition placeholder:text-charcoal-muted/60 focus:border-clay-soft focus:ring-2 focus:ring-clay-soft/25;
+  @apply min-h-11 w-full rounded-xl border border-line bg-canvas-raised px-3 py-2 text-sm text-charcoal shadow-[0_1px_0_rgba(42,36,32,0.03)] outline-none transition-[border-color,box-shadow,background-color] duration-200 placeholder:text-charcoal-muted/60 focus:border-clay-soft focus:bg-white focus:ring-4 focus:ring-clay-soft/15;
 }
 
 .btn-primary {
-  @apply min-h-11 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-white transition hover:bg-ink-hover disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay-soft focus-visible:ring-offset-2;
+  @apply min-h-11 rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-white shadow-[0_5px_14px_rgba(31,61,52,0.16)] transition-[background-color,box-shadow,transform] duration-200 hover:-translate-y-px hover:bg-ink-hover hover:shadow-[0_8px_18px_rgba(31,61,52,0.22)] active:translate-y-0 active:shadow-[0_3px_8px_rgba(31,61,52,0.16)] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay-soft focus-visible:ring-offset-2;
 }
 
 .btn-secondary {
-  @apply min-h-11 rounded-lg border border-ink/25 bg-transparent px-4 py-2 text-sm font-medium text-ink transition hover:bg-ink/5 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay-soft focus-visible:ring-offset-2;
+  @apply min-h-11 rounded-xl border border-ink/20 bg-canvas-raised/80 px-4 py-2 text-sm font-semibold text-ink transition-[background-color,border-color,box-shadow,transform] duration-200 hover:-translate-y-px hover:border-ink/35 hover:bg-white hover:shadow-sm active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay-soft focus-visible:ring-offset-2;
 }
 
 .btn-accent {
-  @apply min-h-11 rounded-lg bg-clay px-4 py-2 text-sm font-medium text-white transition hover:bg-clay-hover disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay-soft focus-visible:ring-offset-2;
+  @apply min-h-11 rounded-xl bg-clay px-4 py-2 text-sm font-semibold text-white shadow-[0_5px_14px_rgba(168,80,31,0.18)] transition-[background-color,box-shadow,transform] duration-200 hover:-translate-y-px hover:bg-clay-hover hover:shadow-[0_8px_18px_rgba(168,80,31,0.22)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay-soft focus-visible:ring-offset-2;
 }
 
 .btn-danger {
@@ -50,17 +73,17 @@ body {
 }
 
 .card {
-  @apply rounded-2xl border border-line/80 bg-canvas-raised p-5 shadow-sm;
+  @apply rounded-2xl border border-line/80 bg-canvas-raised p-5 shadow-[0_8px_24px_rgba(42,36,32,0.045)];
 }
 
 .section-title {
   font-family: var(--font-display);
-  @apply text-2xl font-bold text-ink md:text-3xl;
+  @apply text-2xl font-bold tracking-[-0.02em] text-ink md:text-3xl;
 }
 
 .page-title {
   font-family: var(--font-display);
-  @apply text-xl font-semibold text-ink sm:text-2xl;
+  @apply text-2xl font-bold tracking-[-0.02em] text-ink sm:text-3xl;
 }
 
 .prose-block {
@@ -86,10 +109,10 @@ body {
 }
 
 .glass {
-  background: rgba(251, 249, 243, 0.85);
+  background: rgba(251, 249, 243, 0.9);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(31, 61, 52, 0.08);
+  border-bottom: 1px solid rgba(31, 61, 52, 0.1);
   /* iOS Safari has a known bug where a `position: sticky` element combined
      with `backdrop-filter` fails to hit-test touches until a compositing
      layer is forced. transform: translateZ(0) forces that layer. */
@@ -97,11 +120,11 @@ body {
 }
 
 .card-hover {
-  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+  @apply transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:shadow-lg;
 }
 
 .btn-hover {
-  @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md;
+  @apply transition-[box-shadow,transform] duration-200 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md;
 }
 
 .input-focus {
@@ -117,6 +140,44 @@ body {
    3-tier radius scale instead of one rounded-xl used everywhere. */
 .radius-photo {
   border-radius: 1.75rem;
+}
+
+.page-shell {
+  @apply mx-auto w-full max-w-6xl px-4 py-6 sm:py-8;
+}
+
+.page-intro {
+  @apply mb-6 flex flex-wrap items-end justify-between gap-4 border-b border-line/80 pb-5;
+}
+
+.page-description {
+  @apply mt-2 max-w-2xl text-sm leading-7 text-charcoal-muted sm:text-base;
+}
+
+.surface-panel {
+  @apply rounded-2xl border border-ink/10 bg-ink-soft/55 p-4;
+}
+
+.empty-state {
+  @apply flex min-h-48 flex-col items-center justify-center rounded-2xl border border-dashed border-line bg-canvas-raised/55 px-5 py-10 text-center;
+}
+
+.data-table {
+  @apply w-full text-sm;
+}
+
+.data-table th {
+  @apply whitespace-nowrap px-3 py-3 text-right text-xs font-semibold text-charcoal-muted;
+}
+
+.data-table td {
+  @apply px-3 py-4 align-middle;
+}
+
+.data-table tbody tr {
+  @apply border-t border-line/70 transition-colors hover:bg-ink-soft/35;
+}
+
 }
 
 @keyframes fade-in {
@@ -135,6 +196,11 @@ body {
   }
 }
 
+@keyframes soft-pulse {
+  0%, 100% { opacity: 0.78; }
+  50% { opacity: 1; }
+}
+
 @keyframes ken-burns {
   from { transform: scale(1); }
   to { transform: scale(1.06); }
@@ -145,7 +211,7 @@ body {
 }
 
 .animate-slide-up {
-  animation: slide-up 0.6s ease-out;
+  animation: slide-up 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .animate-fade-in-fast {
@@ -154,6 +220,10 @@ body {
 
 .animate-ken-burns {
   animation: ken-burns 14s ease-out forwards;
+}
+
+.animate-soft-pulse {
+  animation: soft-pulse 1.8s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

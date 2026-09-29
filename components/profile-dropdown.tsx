@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { User, LogOut, ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { User, LogOut, ChevronDown, LayoutDashboard } from "lucide-react";
 
 interface ProfileDropdownProps {
   user: {
@@ -43,8 +42,8 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
               className="flex items-center gap-2 px-4 py-2 text-sm text-charcoal-muted hover:bg-canvas transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              <User className="h-4 w-4" />
-              {user.role === "admin" ? "داشبورد مدیریت" : "پروفایل"}
+              <LayoutDashboard className="h-4 w-4" />
+              {user.role === "admin" ? "داشبورد مدیریت" : "داشبورد من"}
             </Link>
             <form 
               action="/api/auth/logout" 

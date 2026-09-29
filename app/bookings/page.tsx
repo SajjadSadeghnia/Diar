@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CalendarDays, Plus } from "lucide-react";
 import { BookingPaymentStatus } from "@/components/booking-payment-status";
 import { StatusBadge } from "@/components/status-badge";
 import { getCurrentUser } from "@/lib/auth";
@@ -27,15 +28,18 @@ export default async function BookingsPage() {
   });
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <h1 className="page-title">رزروهای من</h1>
+    <div className="page-shell">
+      <header className="page-intro">
+        <div>
+          <h1 className="page-title">رزروهای من</h1>
+          <p className="page-description">وضعیت هر رزرو، زمان پرداخت و رسید ثبت‌شده را در یک نگاه ببینید.</p>
+        </div>
         {user.role === "employee" && (
-          <Link href={reserveHref} className="btn-primary min-h-11 text-sm">
-            رزرو جدید
+          <Link href={reserveHref} className="btn-primary inline-flex items-center gap-2">
+            <Plus className="h-4 w-4" /> رزرو جدید
           </Link>
         )}
-      </div>
+      </header>
 
       <div className="grid gap-4">
         {bookings.map((b) => (
@@ -87,7 +91,12 @@ export default async function BookingsPage() {
         ))}
 
         {!bookings.length && (
-          <div className="card text-center text-charcoal-muted">رزروی ثبت نشده است.</div>
+          <div className="empty-state">
+            <span className="mb-3 rounded-2xl bg-ink-soft p-3 text-ink"><CalendarDays className="h-6 w-6" /></span>
+            <p className="font-semibold text-ink">هنوز رزروی ثبت نشده است.</p>
+            <p className="mt-2 max-w-sm text-sm leading-6 text-charcoal-muted">برای انتخاب تاریخ اقامت و شروع رزرو، وارد صفحه ویلا شوید.</p>
+            {user.role === "employee" && <Link href={reserveHref} className="btn-primary mt-5">شروع رزرو</Link>}
+          </div>
         )}
       </div>
     </div>

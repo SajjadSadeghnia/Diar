@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Building2, CalendarDays, Home, LogIn, LogOut, User } from "lucide-react";
+import { Building2, CalendarDays, CircleHelp, Home, LogIn, LogOut, User } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { ProfileDropdown } from "@/components/profile-dropdown";
 
@@ -8,23 +8,23 @@ export async function SiteHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 glass shadow-sm">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-          <Link href="/" className="flex items-center gap-2 transition-transform hover:scale-105 sm:gap-3">
-            <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-xl bg-ink shadow-md">
+      <header className="sticky top-0 z-40 glass">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:py-3.5">
+          <Link href="/" className="flex items-center gap-2 rounded-xl transition-transform duration-200 hover:scale-[1.02] sm:gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink shadow-[0_5px_14px_rgba(31,61,52,0.18)] md:h-11 md:w-11">
               <Building2 className="h-5 w-5 md:h-7 md:w-7 text-white" />
             </div>
             <div>
-              <p className="text-base font-semibold text-ink md:text-xl">دیار</p>
-              <p className="hidden text-xs text-charcoal-muted sm:block">سامانه رزرو داخلی</p>
+              <p className="text-base font-bold tracking-[-0.02em] text-ink md:text-xl">دیار</p>
+              <p className="hidden text-xs text-charcoal-muted sm:block">سامانه رزرو ویلای سازمانی</p>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-2 text-sm">
+          <nav aria-label="ناوبری اصلی" className="hidden items-center gap-1.5 text-sm md:flex">
             <Link
-              href={user?.role === "admin" ? "/admin" : "/"}
-              className="rounded-lg px-4 py-2 font-medium text-charcoal-muted transition hover:bg-ink/10 hover:text-ink"
+              href={user?.role === "admin" ? "/admin" : "/dashboard"}
+              className="rounded-xl px-3.5 py-2 font-semibold text-charcoal-muted transition-colors duration-200 hover:bg-ink-soft hover:text-ink"
             >
               <span className="inline-flex items-center gap-2">
                 <Home className="h-4 w-4" /> {user?.role === "admin" ? "داشبورد" : "خانه"}
@@ -35,7 +35,7 @@ export async function SiteHeader() {
               <>
                 <Link
                   href="/help"
-                  className="rounded-lg px-4 py-2 font-medium text-charcoal-muted transition hover:bg-ink/10 hover:text-ink"
+                  className="rounded-xl px-3.5 py-2 font-semibold text-charcoal-muted transition-colors duration-200 hover:bg-ink-soft hover:text-ink"
                 >
                   راهنما
                 </Link>
@@ -49,15 +49,19 @@ export async function SiteHeader() {
           </nav>
 
           {/* Mobile Navigation - Top Bar */}
-          <nav className="relative z-10 flex md:hidden items-center gap-2">
+          <nav aria-label="ناوبری موبایل" className="relative z-10 flex items-center gap-2 md:hidden">
             {user ? (
               <>
-                <Link href={user.role === "admin" ? "/admin" : "/dashboard"} className="btn-secondary p-2 rounded-lg btn-hover">
+                <Link
+                  href={user.role === "admin" ? "/admin" : "/dashboard"}
+                  aria-label={user.role === "admin" ? "داشبورد مدیریت" : "داشبورد من"}
+                  className="btn-secondary min-h-11 min-w-11 rounded-xl p-2"
+                >
                   <User className="h-4 w-4" />
                 </Link>
                 <form action="/api/auth/logout" method="post">
                   <button
-                    className="btn-secondary min-h-11 min-w-11 rounded-lg p-2 text-charcoal-muted btn-hover"
+                    className="btn-secondary min-h-11 min-w-11 rounded-xl p-2 text-charcoal-muted"
                     type="submit"
                     aria-label="خروج"
                   >
@@ -66,7 +70,7 @@ export async function SiteHeader() {
                 </form>
               </>
             ) : (
-              <Link href="/login" aria-label="ورود" className="btn-primary p-2 rounded-lg btn-hover">
+              <Link href="/login" aria-label="ورود" className="btn-primary min-h-11 min-w-11 rounded-xl p-2">
                 <LogIn className="h-4 w-4" />
               </Link>
             )}
@@ -75,31 +79,31 @@ export async function SiteHeader() {
       </header>
 
       {user && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 border-t border-line bg-canvas-raised/90 backdrop-blur-sm z-30">
+        <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-line bg-canvas-raised/95 shadow-[0_-6px_20px_rgba(42,36,32,0.06)] backdrop-blur-sm md:hidden">
           <div className="mx-auto max-w-7xl px-4 py-2">
-            <div className="flex justify-around">
+            <nav aria-label="ناوبری پایین" className="flex justify-around">
               <Link
                 href={user.role === "admin" ? "/admin" : "/"}
-                className="flex flex-col items-center gap-1 p-2 rounded-lg text-charcoal-muted hover:text-ink transition-colors"
+                className="flex min-w-16 flex-col items-center gap-1 rounded-xl p-2 text-charcoal-muted transition-colors duration-200 hover:bg-ink-soft hover:text-ink"
               >
                 <Home className="h-5 w-5" />
                 <span className="text-xs">{user.role === "admin" ? "داشبورد" : "خانه"}</span>
               </Link>
               <Link
                 href={user.role === "admin" ? "/admin/bookings" : "/bookings"}
-                className="flex flex-col items-center gap-1 p-2 rounded-lg text-charcoal-muted hover:text-ink transition-colors"
+                className="flex min-w-16 flex-col items-center gap-1 rounded-xl p-2 text-charcoal-muted transition-colors duration-200 hover:bg-ink-soft hover:text-ink"
               >
                 <CalendarDays className="h-5 w-5" />
                 <span className="text-xs">رزروها</span>
               </Link>
               <Link
-                href={user.role === "admin" ? "/admin/properties" : "/dashboard"}
-                className="flex flex-col items-center gap-1 p-2 rounded-lg text-charcoal-muted hover:text-ink transition-colors"
+                href={user.role === "admin" ? "/admin/properties" : "/help"}
+                className="flex min-w-16 flex-col items-center gap-1 rounded-xl p-2 text-charcoal-muted transition-colors duration-200 hover:bg-ink-soft hover:text-ink"
               >
-                <User className="h-5 w-5" />
-                <span className="text-xs">{user.role === "admin" ? "ویلا" : "پروفایل"}</span>
+                {user.role === "admin" ? <Building2 className="h-5 w-5" /> : <CircleHelp className="h-5 w-5" />}
+                <span className="text-xs">{user.role === "admin" ? "ویلا" : "راهنما"}</span>
               </Link>
-            </div>
+            </nav>
           </div>
         </div>
       )}
