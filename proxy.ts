@@ -28,18 +28,27 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Public routes that don't require authentication
-  const publicRoutes = ["/login", "/"];
-
-  // Allow access to login page and the public homepage
-  if (publicRoutes.includes(pathname)) {
+  // /login: already-authenticated visitors get bounced to their home
+  if (pathname === "/login") {
     if (token) {
       const role = decodeRoleFromToken(token);
       if (role === "admin") {
         return NextResponse.redirect(new URL("/admin", request.url));
       }
       if (role === "employee") {
-        return NextResponse.redirect(new URL("/dashboard", request.url));
+        return NextResponse.redirect(new URL("/", request.url));
+      }
+    }
+    return NextResponse.next();
+  }
+
+  // "/": public homepage for everyone, including logged-out visitors.
+  // Admins get bounced to /admin; employees see it as their home page.
+  if (pathname === "/") {
+    if (token) {
+      const role = decodeRoleFromToken(token);
+      if (role === "admin") {
+        return NextResponse.redirect(new URL("/admin", request.url));
       }
     }
     return NextResponse.next();
