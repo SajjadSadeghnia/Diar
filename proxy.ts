@@ -29,9 +29,9 @@ export function proxy(request: NextRequest) {
   }
 
   // Public routes that don't require authentication
-  const publicRoutes = ["/login"];
+  const publicRoutes = ["/login", "/"];
 
-  // Allow access to login page
+  // Allow access to login page and the public homepage
   if (publicRoutes.includes(pathname)) {
     if (token) {
       const role = decodeRoleFromToken(token);
@@ -39,7 +39,7 @@ export function proxy(request: NextRequest) {
         return NextResponse.redirect(new URL("/admin", request.url));
       }
       if (role === "employee") {
-        return NextResponse.redirect(new URL("/", request.url));
+        return NextResponse.redirect(new URL("/dashboard", request.url));
       }
     }
     return NextResponse.next();
@@ -62,11 +62,6 @@ export function proxy(request: NextRequest) {
   // Employee cannot access admin area
   if (pathname.startsWith("/admin") && role !== "admin") {
     return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  // Admin home: use dashboard instead of employee homepage
-  if (pathname === "/" && role === "admin") {
-    return NextResponse.redirect(new URL("/admin", request.url));
   }
 
   return NextResponse.next();

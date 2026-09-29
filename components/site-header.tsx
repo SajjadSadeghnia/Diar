@@ -23,7 +23,7 @@ export async function SiteHeader() {
           {/* Desktop Navigation */}
           <nav aria-label="ناوبری اصلی" className="hidden items-center gap-1.5 text-sm md:flex">
             <Link
-              href={user?.role === "admin" ? "/admin" : "/dashboard"}
+              href={user?.role === "admin" ? "/admin" : user?.role === "employee" ? "/dashboard" : "/"}
               className="rounded-xl px-3.5 py-2 font-semibold text-charcoal-muted transition-colors duration-200 hover:bg-ink-soft hover:text-ink"
             >
               <span className="inline-flex items-center gap-2">

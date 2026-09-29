@@ -118,7 +118,7 @@ export default function LoginPage() {
       </div>
 
       <div className="relative hidden overflow-hidden lg:block">
-        <Image src="/brand/login-villa-dusk.jpg" alt="نمایی از ویلای دیار در غروب" fill priority className="object-cover" />
+        <Image src="/brand/login-umbrellas.jpg" alt="" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-10 text-white xl:p-14">
           <p className="max-w-md text-2xl font-semibold leading-relaxed xl:text-3xl">یک اقامت آرام، با رزروی روشن و ساده.</p>
