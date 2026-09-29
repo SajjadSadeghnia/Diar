@@ -50,14 +50,21 @@ export default function LoginPage() {
             <p className="mt-2 text-sm text-charcoal-muted sm:text-base">ورود کارمندان و مدیر سامانه برای رزرو ویلای سازمانی</p>
           </div>
 
-          {error && <div className="mb-6 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700">{error}</div>}
+          {error && (
+            <div role="alert" className="mb-6 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700">
+              {error}
+            </div>
+          )}
 
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-charcoal-muted">اطلاعات کاربر</label>
+              <label htmlFor="login-phone" className="mb-2 block text-sm font-medium text-charcoal-muted">
+                اطلاعات کاربر
+              </label>
               <div className="relative">
                 <Phone className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-charcoal-muted/50" />
                 <input
+                  id="login-phone"
                   className="input pr-11 text-base"
                   type="tel"
                   inputMode="numeric"
@@ -72,10 +79,13 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-charcoal-muted">رمز عبور</label>
+              <label htmlFor="login-password" className="mb-2 block text-sm font-medium text-charcoal-muted">
+                رمز عبور
+              </label>
               <div className="relative">
                 <Lock className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-charcoal-muted/50" />
                 <input
+                  id="login-password"
                   className="input pr-11 pl-10 text-base"
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
@@ -87,7 +97,8 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((s) => !s)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-muted/50"
+                  aria-label={showPassword ? "پنهان کردن رمز عبور" : "نمایش رمز عبور"}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 p-1 text-charcoal-muted/50"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>

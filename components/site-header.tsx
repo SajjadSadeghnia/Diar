@@ -66,7 +66,7 @@ export async function SiteHeader() {
                 </form>
               </>
             ) : (
-              <Link href="/login" className="btn-primary p-2 rounded-lg btn-hover">
+              <Link href="/login" aria-label="ورود" className="btn-primary p-2 rounded-lg btn-hover">
                 <LogIn className="h-4 w-4" />
               </Link>
             )}

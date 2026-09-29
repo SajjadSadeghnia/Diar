@@ -29,7 +29,7 @@ export async function SiteFooter({ hasBottomNav = false }: SiteFooterProps) {
         </div>
 
         <div>
-          <h3 className="mb-3 font-semibold text-white/90">دسترسی سریع</h3>
+          <h2 className="mb-3 font-semibold text-white/90">دسترسی سریع</h2>
           <div className="space-y-2 text-sm text-white/70">
             <p>
               <Link href={user?.role === "admin" ? "/admin" : "/"}>خانه</Link>
@@ -48,7 +48,7 @@ export async function SiteFooter({ hasBottomNav = false }: SiteFooterProps) {
         </div>
 
         <div>
-          <h3 className="mb-3 font-semibold text-white/90">تماس با ما</h3>
+          <h2 className="mb-3 font-semibold text-white/90">تماس با ما</h2>
           <div className="space-y-2 text-sm text-white/70">
             <p>{contactInfo}</p>
             <p>
