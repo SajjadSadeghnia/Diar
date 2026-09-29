@@ -1,6 +1,19 @@
+const PERSIAN_DIGITS = "۰۱۲۳۴۵۶۷۸۹";
+const ARABIC_INDIC_DIGITS = "٠١٢٣٤٥٦٧٨٩";
+
+/** Convert Persian/Arabic-Indic digits to ASCII so phone numbers typed on
+ * non-English keyboards (common on Iranian phones) still validate. */
+function toAsciiDigits(input: string): string {
+  return input.replace(/[۰-۹٠-٩]/g, (ch) => {
+    const persianIndex = PERSIAN_DIGITS.indexOf(ch);
+    if (persianIndex !== -1) return String(persianIndex);
+    return String(ARABIC_INDIC_DIGITS.indexOf(ch));
+  });
+}
+
 /** Normalize Iranian mobile numbers for lookup (09xxxxxxxxx). */
 export function normalizePhone(input: string): string {
-  const trimmed = input.trim().replace(/\s+/g, "");
+  const trimmed = toAsciiDigits(input.trim().replace(/\s+/g, ""));
   const digits = trimmed.replace(/\D/g, "");
 
   if (digits.startsWith("98") && digits.length === 12) {

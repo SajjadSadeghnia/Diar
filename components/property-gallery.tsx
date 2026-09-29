@@ -89,7 +89,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
             <Expand className="h-4 w-4" />
             نمایش بزرگ
           </button>
-          <span className="absolute bottom-3 right-3 rounded-lg bg-black/55 px-2 py-1 text-xs text-white">
+          <span dir="ltr" className="absolute bottom-3 right-3 rounded-lg bg-black/55 px-2 py-1 text-xs text-white">
             {index + 1} / {gallery.length}
           </span>
         </div>
@@ -160,7 +160,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
               sizes="100vw"
             />
           </div>
-          <p className="absolute bottom-6 text-sm text-white/80">
+          <p dir="ltr" className="absolute bottom-6 text-sm text-white/80">
             {index + 1} از {gallery.length}
           </p>
         </div>
