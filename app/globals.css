@@ -34,19 +34,19 @@ body {
 }
 
 .btn-primary {
-  @apply min-h-11 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-white transition hover:bg-ink-hover disabled:cursor-not-allowed disabled:opacity-60;
+  @apply min-h-11 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-white transition hover:bg-ink-hover disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay-soft focus-visible:ring-offset-2;
 }
 
 .btn-secondary {
-  @apply min-h-11 rounded-lg border border-ink/25 bg-transparent px-4 py-2 text-sm font-medium text-ink transition hover:bg-ink/5 disabled:cursor-not-allowed disabled:opacity-60;
+  @apply min-h-11 rounded-lg border border-ink/25 bg-transparent px-4 py-2 text-sm font-medium text-ink transition hover:bg-ink/5 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay-soft focus-visible:ring-offset-2;
 }
 
 .btn-accent {
-  @apply min-h-11 rounded-lg bg-clay px-4 py-2 text-sm font-medium text-white transition hover:bg-clay-hover disabled:cursor-not-allowed disabled:opacity-60;
+  @apply min-h-11 rounded-lg bg-clay px-4 py-2 text-sm font-medium text-white transition hover:bg-clay-hover disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay-soft focus-visible:ring-offset-2;
 }
 
 .btn-danger {
-  @apply min-h-11 rounded-lg bg-rose-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-60;
+  @apply min-h-11 rounded-lg bg-rose-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay-soft focus-visible:ring-offset-2;
 }
 
 .card {
