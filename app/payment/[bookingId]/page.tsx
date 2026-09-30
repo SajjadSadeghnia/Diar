@@ -145,7 +145,7 @@ export default function PaymentPage() {
     new Date(booking.expiresAt) > new Date();
 
   return (
-    <div className="mx-auto mt-6 max-w-xl px-4 pb-6">
+    <div className="mx-auto mt-6 max-w-xl animate-fade-in px-4 pb-6">
       <Link href="/bookings" className="mb-4 inline-flex text-sm text-ink">
         بازگشت به رزروها
       </Link>

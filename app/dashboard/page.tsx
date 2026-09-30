@@ -38,7 +38,7 @@ export default async function DashboardPage() {
   const reserveHref = property ? `/properties/${property.id}` : "/";
 
   return (
-    <div className="page-shell space-y-5">
+    <div className="page-shell space-y-5 animate-fade-in">
       <header className="page-intro">
         <div>
           <h1 className="page-title">سلام، {user.name}</h1>

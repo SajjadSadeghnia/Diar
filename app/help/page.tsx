@@ -8,7 +8,7 @@ export default async function HelpPage() {
   if (!user) redirect("/login");
 
   return (
-    <div className="page-shell max-w-3xl space-y-8">
+    <div className="page-shell max-w-3xl space-y-8 animate-fade-in">
       <header>
         <h1 className="page-title">راهنمای رزرو دیار</h1>
         <p className="page-description">قوانین و مراحل رزرو ویلای سازمانی</p>

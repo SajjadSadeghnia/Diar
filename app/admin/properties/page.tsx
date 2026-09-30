@@ -165,7 +165,7 @@ export default function AdminPropertiesPage() {
   }
 
   return (
-    <div className="page-shell max-w-3xl space-y-4">
+    <div className="page-shell max-w-3xl space-y-4 animate-fade-in">
       <Link href="/admin" className="btn-secondary mb-2 inline-flex">
         بازگشت به داشبورد
       </Link>

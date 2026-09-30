@@ -178,7 +178,7 @@ export default function PropertyDetailPage() {
   const details = property.details;
 
   return (
-    <div className="page-shell min-w-0 overflow-x-hidden">
+    <div className="page-shell min-w-0 animate-fade-in overflow-x-hidden">
       <Link href="/" className="btn-secondary mb-4 inline-flex">
         بازگشت به خانه
       </Link>

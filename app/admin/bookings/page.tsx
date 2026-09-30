@@ -37,7 +37,7 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
   ]);
 
   return (
-    <div className="page-shell space-y-6">
+    <div className="page-shell space-y-6 animate-fade-in">
       <header className="page-intro">
         <div>
           <h1 className="page-title">مدیریت رزروها</h1>

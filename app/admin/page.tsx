@@ -50,7 +50,7 @@ export default async function AdminDashboard() {
   const countByStatus = Object.fromEntries(statusCounts.map((s) => [s.status, s._count._all]));
 
   return (
-    <div className="page-shell max-w-7xl space-y-6">
+    <div className="page-shell max-w-7xl space-y-6 animate-fade-in">
       <header className="page-intro">
         <div>
           <h1 className="page-title">داشبورد مدیریت دیار</h1>

@@ -28,7 +28,7 @@ export default async function BookingsPage() {
   });
 
   return (
-    <div className="page-shell">
+    <div className="page-shell animate-fade-in">
       <header className="page-intro">
         <div>
           <h1 className="page-title">رزروهای من</h1>
