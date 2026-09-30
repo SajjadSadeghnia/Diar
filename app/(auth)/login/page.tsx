@@ -39,8 +39,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="grid min-h-[calc(100vh-4.75rem)] lg:grid-cols-[minmax(0,0.94fr)_minmax(30rem,1.06fr)]">
-      <div className="flex items-center justify-center px-4 py-10 sm:px-8 lg:py-16">
+    <div className="flex min-h-[calc(100vh-4.75rem)] flex-col lg:flex-row">
+      <div className="flex flex-1 items-center justify-center px-4 py-10 sm:px-8 lg:basis-[47%] lg:py-16">
         <div className="w-full max-w-md animate-slide-up">
           <div className="mb-8 text-center">
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-ink shadow-[0_10px_24px_rgba(31,61,52,0.2)]">
@@ -117,7 +117,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="relative hidden overflow-hidden lg:block">
+      <div className="relative hidden overflow-hidden lg:block lg:min-w-[30rem] lg:basis-[53%]">
         <Image src="/brand/login-umbrellas.jpg" alt="" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-10 text-white xl:p-14">
